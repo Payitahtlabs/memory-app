@@ -1,0 +1,128 @@
+@use "../abstract/variables" as var;
+@use "../abstract/mixin" as mx;
+
+.homescreen {
+  @include mx.flex-center;
+  gap: 85px;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+
+  &__watermark {
+    position: absolute;
+    left: -42px;
+    bottom: 82px;
+    width: 414px;
+    height: 301px;
+    color: var.$accent;
+    opacity: 0.05;
+    transform: rotate(37.42deg);
+    pointer-events: none;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &__tagline {
+    margin: 0;
+    font-size: 48px;
+  }
+
+  &__headline {
+    margin: 0;
+    font-family: "Red Rose", serif;
+    font-weight: 700;
+    font-size: 140px;
+  }
+
+  &__play {
+    @include mx.flex-center(row);
+    gap: 20px;
+    height: 98px;
+    padding: 24px;
+    border: none;
+    background-color: var.$accent;
+    color: var.$bg-dark;
+    font-family: "Red Rose", serif;
+    font-weight: 700;
+    font-size: 40px;
+    cursor: pointer;
+    transition: height 0.2s ease, margin-bottom 0.2s ease;
+
+    &:hover {
+      height: 102px;
+      margin-bottom: -4px;
+    }
+  }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 32px;
+    transition: width 0.2s ease, height 0.2s ease;
+
+    svg {
+      display: block;
+      width: 44px;
+      height: 32px;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &__play:hover &__icon {
+    width: 60px;
+    height: 54px;
+  }
+
+  &__play:hover &__icon svg {
+    transform: rotate(-25.77deg) scale(1.125);
+  }
+
+  &__arrow-wrap {
+    position: relative;
+    width: 35px;
+    height: 30px;
+    transition: width 0.2s ease;
+  }
+
+  &__play:hover &__arrow-wrap {
+    width: 40px;
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.2s ease;
+
+    &--default {
+      width: 35px;
+      opacity: 1;
+    }
+
+    &--bold {
+      width: 40px;
+      opacity: 0;
+    }
+  }
+
+  &__play:hover &__arrow--default {
+    opacity: 0;
+  }
+
+  &__play:hover &__arrow--bold {
+    opacity: 1;
+  }
+}
