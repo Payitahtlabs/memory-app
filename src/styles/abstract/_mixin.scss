@@ -1,6 +1,18 @@
+@use "variables" as var;
+
 @mixin flex-center($direction: column) {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: $direction;
+}
+
+@mixin button-base {
+  @include flex-center(row);
+  border: none;
+  background-color: var.$accent;
+  color: var.$bg-dark;
+  font-family: "Red Rose", serif;
+  font-weight: 700;
+  cursor: pointer;
 }
