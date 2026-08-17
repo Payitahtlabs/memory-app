@@ -1,0 +1,270 @@
+@use "../abstract/variables" as var;
+@use "../abstract/mixin" as mx;
+
+$theme-names: "code-vibes", "gaming", "da-projects";
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var.$bg-light;
+  color: var.$bg-dark;
+
+  &__content {
+    width: 1103px;
+    margin: 0 auto;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 262.55px;
+    margin-bottom: 64px;
+  }
+
+  &__headline {
+    margin: 0;
+    font-family: "Red Rose", serif;
+    font-weight: 700;
+    font-size: 54px;
+  }
+
+  &__underline {
+    display: block;
+    width: 262.55px;
+    margin: -11.55px 0 0 -11.55px;
+    transform: scaleX(-1);
+  }
+
+  &__layout {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+
+    &--right {
+      align-items: flex-end;
+      gap: 45px;
+    }
+  }
+
+  &__group {
+    margin: 0;
+    padding: 0;
+    border: none;
+
+    &--player {
+      margin-top: 89px;
+    }
+
+    &--size {
+      margin-top: 54px;
+    }
+  }
+
+  &__legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    font-family: "Almarai", sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  &__legend-icon {
+    display: block;
+    width: 32px;
+    height: 32px;
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    padding-left: 44px;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  &__radio {
+    appearance: none;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    border: 3px solid var.$bg-dark;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  &__radio:checked,
+  &__group--theme &__option:hover &__radio {
+    border-width: 2px;
+    background-color: var.$bg-dark;
+    box-shadow: inset 0 0 0 7px var.$bg-light;
+  }
+
+  &__group--theme:has(&__option:hover) &__option:not(:hover) &__radio:checked {
+    border-width: 3px;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  &__text {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  &__radio:checked ~ &__text,
+  &__group--theme &__option:hover &__text {
+    font-weight: 700;
+  }
+
+  &__group--theme:has(&__option:hover) &__option:not(:hover) &__radio:checked ~ &__text {
+    font-weight: 400;
+  }
+
+  &__arrow {
+    display: block;
+    flex-shrink: 0;
+    width: 0;
+    height: 17.32px;
+    opacity: 0;
+    transition: width 0.2s ease, opacity 0.2s ease;
+  }
+
+  &__radio:checked ~ &__arrow,
+  &__group--theme &__option:hover &__arrow {
+    width: 49.66px;
+    opacity: 1;
+  }
+
+  &__group--theme:has(&__option:hover) &__option:not(:hover) &__radio:checked ~ &__arrow {
+    width: 0;
+    opacity: 0;
+  }
+
+  &__preview {
+    width: 460px;
+    height: 412px;
+    border-radius: 16px;
+    background-color: var.$bar-bg;
+    background-size: cover;
+  }
+
+  @each $theme in $theme-names {
+    &:has(&__option > &__radio[value="#{$theme}"]:checked) &__preview {
+      background-image: url("../../assets/img/theme-preview-#{$theme}.png");
+    }
+  }
+
+  @each $theme in $theme-names {
+    &:has(&__option:hover > &__radio[value="#{$theme}"]) &__preview {
+      background-image: url("../../assets/img/theme-preview-#{$theme}.png");
+    }
+  }
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 546px;
+    height: 81px;
+    padding: 14px 20px;
+    background-color: var.$bar-bg;
+  }
+
+  &__value {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  &__slash {
+    position: relative;
+    flex-shrink: 0;
+    width: 56px;
+    height: 8px;
+    margin: 0 -18.73px;
+    background-color: var.$accent;
+    transform: rotate(109.33deg);
+
+    &--diamond {
+      width: 53.666px;
+      height: 4px;
+      margin: 0 -14.83px;
+      transform: rotate(116.57deg);
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 16px;
+        height: 16px;
+        background-color: var.$accent;
+        transform: translate(50%, -50%) rotate(18.43deg);
+      }
+    }
+  }
+
+  &__start {
+    @include mx.button-base;
+    gap: 8px;
+    margin-left: auto;
+    padding: 14px 20px;
+
+    &:disabled {
+      background-color: var.$disabled-bg;
+      color: var.$disabled-text;
+      cursor: default;
+    }
+  }
+
+  &__start-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    transition: width 0.2s ease, height 0.2s ease;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &__start-label {
+    font-size: 20px;
+    line-height: 24px;
+    transition: font-size 0.2s ease;
+  }
+
+  &__start:not(:disabled):hover &__start-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  &__start:not(:disabled):hover &__start-icon svg {
+    transform: rotate(-5.33deg);
+  }
+
+  &__start:not(:disabled):hover &__start-label {
+    font-size: 22px;
+  }
+}

@@ -1,4 +1,5 @@
 import "./styles/style.scss";
+import { initSettings, renderSettings } from "./settings";
 import controllerIcon from "./assets/icons/stadia-controller.svg?raw";
 import arrowDefault from "./assets/icons/arrow-right.svg";
 import arrowBold from "./assets/icons/arrow-right-bold.svg";
@@ -52,18 +53,10 @@ function initPlayButton(): void {
   button?.addEventListener("click", showSettings);
 }
 
-/** Replaces the current screen with the settings placeholder. */
+/** Replaces the current screen with the settings screen and wires it up. */
 function showSettings(): void {
-  CONTENT.innerHTML = renderSettingsPlaceholder();
-}
-
-/** Returns a temporary placeholder until the settings screen exists. */
-function renderSettingsPlaceholder(): string {
-  return `
-    <section class="settings">
-      <h1>Settings</h1>
-    </section>
-  `;
+  CONTENT.innerHTML = renderSettings();
+  initSettings();
 }
 
 init();
