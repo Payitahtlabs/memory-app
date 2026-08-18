@@ -181,10 +181,11 @@ $theme-names: "code-vibes", "gaming", "da-projects";
     display: flex;
     align-items: center;
     gap: 16px;
-    width: 546px;
+    width: max-content;
     height: 81px;
     padding: 14px 20px;
     background-color: var.$bar-bg;
+    white-space: nowrap;
   }
 
   &__value {
@@ -215,7 +216,7 @@ $theme-names: "code-vibes", "gaming", "da-projects";
         width: 16px;
         height: 16px;
         background-color: var.$accent;
-        transform: translate(50%, -50%) rotate(18.43deg);
+        transform: translate(50%, -50%) rotate(45deg);
       }
     }
   }
@@ -239,7 +240,7 @@ $theme-names: "code-vibes", "gaming", "da-projects";
     align-items: center;
     width: 24px;
     height: 24px;
-    transition: width 0.2s ease, height 0.2s ease;
+    transition: width 0.2s ease, height 0.2s ease, margin-right 0.2s ease;
 
     svg {
       display: block;
@@ -251,13 +252,15 @@ $theme-names: "code-vibes", "gaming", "da-projects";
 
   &__start-label {
     font-size: 20px;
-    line-height: 24px;
-    transition: font-size 0.2s ease;
+    line-height: 1.2;
+    transform-origin: right center;
+    transition: transform 0.2s ease;
   }
 
   &__start:not(:disabled):hover &__start-icon {
     width: 30px;
     height: 30px;
+    margin-right: 5.34px;
   }
 
   &__start:not(:disabled):hover &__start-icon svg {
@@ -265,6 +268,6 @@ $theme-names: "code-vibes", "gaming", "da-projects";
   }
 
   &__start:not(:disabled):hover &__start-label {
-    font-size: 22px;
+    transform: scale(1.1);
   }
 }

@@ -1,10 +1,16 @@
-import type { FieldSize, Player, Theme } from "./types";
+import type { FieldSize, GameSettings, Player, Theme } from "./types";
 import paletteIcon from "./assets/icons/palette.svg";
 import chessPawnIcon from "./assets/icons/chess-pawn.svg";
 import styleIcon from "./assets/icons/style.svg";
 import arrowSelected from "./assets/icons/arrow-selected.svg";
 import underlineHeadline from "./assets/icons/underline-headline.svg";
 import smartDisplayIcon from "./assets/icons/smart-display.svg?raw";
+
+const gameSettings: GameSettings = {
+  theme: null,
+  player: null,
+  fieldSize: null,
+};
 
 interface SettingsOption {
   value: Theme | Player | FieldSize;
@@ -44,6 +50,16 @@ const GROUPS: SettingsGroup[] = [
 ];
 
 const BAR_PLACEHOLDERS: string[] = ["Theme", "Player", "Board size"];
+const BAR_LABELS: Record<Theme | Player | FieldSize, string> = {
+  "code-vibes": "Code vibes",
+  "gaming": "Gaming",
+  "da-projects": "DA Projects",
+  "blue": "Blue Player",
+  "orange": "Orange Player",
+  "4x4": "Board-16 Cards",
+  "4x6": "Board-24 Cards",
+  "6x6": "Board-36 Cards",
+};
 
 /** Returns the complete settings screen markup. */
 export function renderSettings(): string {
@@ -142,6 +158,80 @@ function renderStartButton(): string {
   `;
 }
 
+/** Returns the value of the checked radio input in the given group, or null. */
+function readChecked(group: string): string | null {
+  const input = document.querySelector<HTMLInputElement>(`input[name="${group}"]:checked`);
+  return input?.value ?? null;
+}
+
+/** Writes a changed radio value into the settings state. Returns whether the group was known. */
+function applySettingValue(input: HTMLInputElement): boolean {
+  switch (input.name) {
+    case "theme":
+      gameSettings.theme = input.value as Theme;
+      return true;
+    case "player":
+      gameSettings.player = input.value as Player;
+      return true;
+    case "fieldSize":
+      gameSettings.fieldSize = input.value as FieldSize;
+      return true;
+    default:
+      return false;
+  }
+}
+
+/** Updates the game settings state from a changed radio input. */
+function handleSettingsChange(event: Event): void {
+  const input = event.target;
+  if (!(input instanceof HTMLInputElement)) return;
+  if (applySettingValue(input)) syncSettingsUi();
+}
+
+/** Mirrors the settings state into the selection bar texts. */
+function syncBarValues(): void {
+  const values = [gameSettings.theme, gameSettings.player, gameSettings.fieldSize];
+  const entries = document.querySelectorAll(".settings__bar .settings__value");
+  values.forEach((value, index) => {
+    const entry = entries[index];
+    if (entry) entry.textContent = value ? BAR_LABELS[value] : BAR_PLACEHOLDERS[index];
+  });
+}
+
+/** Enables the start button and diamond slashes once all settings are chosen. */
+function syncBarState(): void {
+  const complete = gameSettings.theme !== null
+    && gameSettings.player !== null
+    && gameSettings.fieldSize !== null;
+  const button = document.querySelector<HTMLButtonElement>(".settings__start");
+  if (button) button.disabled = !complete;
+  document.querySelectorAll(".settings__slash").forEach((slash) => {
+    slash.classList.toggle("settings__slash--diamond", complete);
+  });
+}
+
+/** Applies the chosen theme to the document root for theme styling. */
+function syncTheme(): void {
+  if (gameSettings.theme) {
+    document.body.dataset.theme = gameSettings.theme;
+  } else {
+    delete document.body.dataset.theme;
+  }
+}
+
+/** Mirrors the settings state into bar, button, and document theme. */
+function syncSettingsUi(): void {
+  syncBarValues();
+  syncBarState();
+  syncTheme();
+}
+
 /** Wires up the settings screen interactions. */
 export function initSettings(): void {
+  gameSettings.theme = readChecked("theme") as Theme | null;
+  gameSettings.player = readChecked("player") as Player | null;
+  gameSettings.fieldSize = readChecked("fieldSize") as FieldSize | null;
+  const screen = document.querySelector(".settings");
+  screen?.addEventListener("change", handleSettingsChange);
+  syncSettingsUi();
 }
