@@ -57,6 +57,23 @@ function initPlayButton(): void {
 function showSettings(): void {
   CONTENT.innerHTML = renderSettings();
   initSettings();
+  initStartButton();
+}
+
+/** Renders the game placeholder into the content area. */
+function showGame(): void {
+  CONTENT.innerHTML = renderGamePlaceholder();
+}
+
+/** Returns a temporary placeholder for the game screen. */
+function renderGamePlaceholder(): string {
+  return `<section class="game"><h1>Game</h1></section>`;
+}
+
+/** Wires the start button to the game screen. */
+function initStartButton(): void {
+  const button = document.querySelector(".settings__start");
+  button?.addEventListener("click", showGame);
 }
 
 init();

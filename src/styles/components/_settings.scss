@@ -3,6 +3,9 @@
 
 $theme-names: "code-vibes", "gaming", "da-projects";
 
+$start-label-width: 53.44px;
+$start-hover-scale: 1.1;
+
 .settings {
   display: flex;
   flex-direction: column;
@@ -260,7 +263,7 @@ $theme-names: "code-vibes", "gaming", "da-projects";
   &__start:not(:disabled):hover &__start-icon {
     width: 30px;
     height: 30px;
-    margin-right: 5.34px;
+    margin-right: $start-label-width * ($start-hover-scale - 1);
   }
 
   &__start:not(:disabled):hover &__start-icon svg {
@@ -268,6 +271,6 @@ $theme-names: "code-vibes", "gaming", "da-projects";
   }
 
   &__start:not(:disabled):hover &__start-label {
-    transform: scale(1.1);
+    transform: scale($start-hover-scale);
   }
 }
