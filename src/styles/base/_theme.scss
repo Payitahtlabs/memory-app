@@ -1,0 +1,9 @@
+@use "sass:map";
+@use "../abstract" as *;
+
+@each $theme, $colors in $themes {
+  body[data-theme="#{$theme}"] {
+    --game-bg: #{map.get($colors, "game-bg")};
+    --game-text: #{map.get($colors, "game-text")};
+  }
+}
