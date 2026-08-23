@@ -7,3 +7,9 @@ export interface GameSettings {
   player: Player | null;
   fieldSize: FieldSize | null;
 }
+
+export const CARD_MOTIF_COUNTS: Record<Theme, number> = {
+  "code-vibes": 18,
+  "gaming": 18,
+  "da-projects": 18,
+};
