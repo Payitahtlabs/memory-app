@@ -13,3 +13,10 @@ export const CARD_MOTIF_COUNTS: Record<Theme, number> = {
   "gaming": 18,
   "da-projects": 18,
 };
+
+export interface Card {
+  readonly id: number;
+  readonly motifId: number;
+  isFlipped: boolean;
+  isMatched: boolean;
+}
