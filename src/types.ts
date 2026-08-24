@@ -1,3 +1,5 @@
+import type { Card } from "./card";
+
 export type Player = "blue" | "orange";
 export type Theme = "code-vibes" | "gaming" | "da-projects";
 export type FieldSize = "4x4" | "4x6" | "6x6";
@@ -19,4 +21,11 @@ export interface CardData {
   readonly motifId: number;
   isFlipped: boolean;
   isMatched: boolean;
+}
+
+export interface GameState {
+  cards: Card[];
+  waitingCards: Card[];
+  scores: Record<Player, number>;
+  currentPlayer: Player;
 }
