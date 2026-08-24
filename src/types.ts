@@ -14,7 +14,7 @@ export const CARD_MOTIF_COUNTS: Record<Theme, number> = {
   "da-projects": 18,
 };
 
-export interface Card {
+export interface CardData {
   readonly id: number;
   readonly motifId: number;
   isFlipped: boolean;
