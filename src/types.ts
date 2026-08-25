@@ -16,6 +16,12 @@ export const CARD_MOTIF_COUNTS: Record<Theme, number> = {
   "da-projects": 18,
 };
 
+export const FIELD_SIZE_PAIRS: Record<FieldSize, number> = {
+  "4x4": 8,
+  "4x6": 12,
+  "6x6": 18,
+};
+
 export interface CardData {
   readonly id: number;
   readonly motifId: number;
