@@ -2,6 +2,8 @@ import { Card } from "./card";
 import type { Theme, FieldSize, Player, GameState } from "./types";
 import { CARD_MOTIF_COUNTS, FIELD_SIZE_PAIRS } from "./types";
 
+let gameState: GameState | null = null;
+
 /** Returns a new array with the items in random order. */
 function shuffle<T>(items: T[]): T[] {
   const result = [...items];
@@ -16,7 +18,6 @@ function shuffle<T>(items: T[]): T[] {
 function drawMotifs(theme: Theme, pairCount: number): number[] {
   const pool = Array.from({ length: CARD_MOTIF_COUNTS[theme] }, (_, index) => index + 1);
   const shuffled = shuffle(pool);
-
   return shuffled.slice(0, pairCount);
 }
 
@@ -37,10 +38,53 @@ export function startGame(theme: Theme, fieldSize: FieldSize, startPlayer: Playe
   const cards = createCards(motifIds);
   const shuffledCards = shuffle(cards);
 
-  return {
+  gameState = {
     cards: shuffledCards,
     waitingCards: [],
     scores: { blue: 0, orange: 0 },
     currentPlayer: startPlayer,
   };
+  return gameState;
+}
+
+/** Handles a click on the card with the given id according to the game rules. */
+export function handleCardClick(cardId: number): void {
+  if (!gameState) return;
+  const card = gameState.cards.find((c) => c.id === cardId);
+  if (!card) return;
+
+  if (card.isMatched || gameState.waitingCards.includes(card)) return;
+  if (gameState.waitingCards.length === 2) {
+    clearWaitingCards();
+  }
+
+  card.flip();
+  gameState.waitingCards.push(card);
+  if (gameState.waitingCards.length === 2) {
+    resolveComparison();
+  }
+}
+
+/** Resolves the comparison of the two waiting cards as a match or a player switch. */
+function resolveComparison(): void {
+  if (!gameState) return;
+  const first = gameState.waitingCards[0];
+  const second = gameState.waitingCards[1];
+
+  if (first.motifId === second.motifId) {
+    first.markAsMatched();
+    second.markAsMatched();
+    gameState.scores[gameState.currentPlayer] += 1;
+    gameState.waitingCards = [];
+  } else {
+    gameState.currentPlayer = gameState.currentPlayer === "blue" ? "orange" : "blue";
+  }
+}
+
+/** Flips the two waiting cards back and clears the list. */
+function clearWaitingCards(): void {
+  if (!gameState) return;
+  gameState.waitingCards[0].flipBack();
+  gameState.waitingCards[1].flipBack();
+  gameState.waitingCards = [];
 }
