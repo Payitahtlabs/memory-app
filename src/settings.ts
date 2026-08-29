@@ -236,6 +236,7 @@ export function initSettings(): void {
   syncSettingsUi();
 }
 
+/** Returns the completed start settings, or null while a selection is missing. */
 export function getStartSettings(): StartSettings | null {
   if (gameSettings.theme === null || gameSettings.player === null
     || gameSettings.fieldSize === null) {
