@@ -226,14 +226,16 @@ function syncSettingsUi(): void {
   syncTheme();
 }
 
-/** Wires up the settings screen interactions. */
-export function initSettings(): void {
+/** Wires up the settings screen interactions and the start callback. */
+export function initSettings(onStart: () => void): void {
   gameSettings.theme = readChecked("theme") as Theme | null;
   gameSettings.player = readChecked("player") as Player | null;
   gameSettings.fieldSize = readChecked("fieldSize") as FieldSize | null;
   const screen = document.querySelector(".settings");
   screen?.addEventListener("change", handleSettingsChange);
   syncSettingsUi();
+  const button = document.querySelector(".settings__start");
+  button?.addEventListener("click", onStart);
 }
 
 /** Returns the completed start settings, or null while a selection is missing. */

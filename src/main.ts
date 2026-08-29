@@ -57,8 +57,7 @@ function initPlayButton(): void {
 /** Replaces the current screen with the settings screen and wires it up. */
 function showSettings(): void {
   CONTENT.innerHTML = renderSettings();
-  initSettings();
-  initStartButton();
+  initSettings(showGame);
 }
 
 /** Starts a game from the chosen settings and renders the game placeholder. */
@@ -72,12 +71,6 @@ function showGame(): void {
 /** Returns a temporary placeholder for the game screen. */
 function renderGamePlaceholder(): string {
   return `<section class="game"><h1>Game</h1></section>`;
-}
-
-/** Wires the start button to the game screen. */
-function initStartButton(): void {
-  const button = document.querySelector(".settings__start");
-  button?.addEventListener("click", showGame);
 }
 
 init();
