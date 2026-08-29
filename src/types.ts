@@ -35,3 +35,9 @@ export interface GameState {
   scores: Record<Player, number>;
   currentPlayer: Player;
 }
+
+export interface StartSettings {
+  theme: Theme;
+  player: Player;
+  fieldSize: FieldSize;
+}
