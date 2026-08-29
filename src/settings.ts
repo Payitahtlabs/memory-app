@@ -1,4 +1,4 @@
-import type { FieldSize, GameSettings, Player, Theme } from "./types";
+import type { FieldSize, GameSettings, Player, Theme, StartSettings } from "./types";
 import paletteIcon from "./assets/icons/palette.svg";
 import chessPawnIcon from "./assets/icons/chess-pawn.svg";
 import styleIcon from "./assets/icons/style.svg";
@@ -234,4 +234,16 @@ export function initSettings(): void {
   const screen = document.querySelector(".settings");
   screen?.addEventListener("change", handleSettingsChange);
   syncSettingsUi();
+}
+
+export function getStartSettings(): StartSettings | null {
+  if (gameSettings.theme === null || gameSettings.player === null
+    || gameSettings.fieldSize === null) {
+    return null;
+  }
+  return {
+    theme: gameSettings.theme,
+    player: gameSettings.player,
+    fieldSize: gameSettings.fieldSize,
+  };
 }
