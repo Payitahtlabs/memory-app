@@ -5,5 +5,8 @@
   body[data-theme="#{$theme}"] {
     --game-bg: #{map.get($colors, "game-bg")};
     --game-text: #{map.get($colors, "game-text")};
+    --game-font: #{map.get($colors, "game-font")};
+    --player-blue-display: #{map.get($colors, "player-blue-display")};
+    --player-orange-display: #{map.get($colors, "player-orange-display")};
   }
 }
