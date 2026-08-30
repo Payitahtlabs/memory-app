@@ -17,7 +17,31 @@
 @font-face {
   font-family: "Red Rose";
   font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../../assets/fonts/red-rose-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Red Rose";
+  font-style: normal;
   font-weight: 700;
   font-display: swap;
   src: url("../../assets/fonts/red-rose-bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Orbitron";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../../assets/fonts/orbitron-bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../../assets/fonts/figtree-bold.woff2") format("woff2");
 }
