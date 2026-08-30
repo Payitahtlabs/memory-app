@@ -1,0 +1,46 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+
+  &__inner {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__front,
+  &__back {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  &__front {
+    visibility: hidden;
+  }
+
+  &--flipped &__front,
+  &--matched &__front {
+    visibility: visible;
+  }
+
+  &--flipped &__back,
+  &--matched &__back {
+    visibility: hidden;
+  }
+
+  &__motif,
+  &__watermark {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}

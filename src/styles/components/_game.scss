@@ -2,4 +2,46 @@
   min-height: 100vh;
   background-color: var(--game-bg);
   color: var(--game-text);
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1218px;
+    height: 102px;
+    margin: 0 auto 54px;
+    font-family: var(--game-font);
+
+    &--code-vibes {
+      height: 62px;
+    }
+  }
+
+  &__score {
+    display: flex;
+    align-items: center;
+    margin: 0;
+
+    &--blue {
+      color: var(--player-blue-display);
+    }
+
+    &--orange {
+      color: var(--player-orange-display);
+    }
+  }
+
+  &__current {
+    margin: 0;
+  }
+
+  &__current-player {
+    &--blue {
+      color: var(--player-blue-display);
+    }
+
+    &--orange {
+      color: var(--player-orange-display);
+    }
+  }
 }
