@@ -1,6 +1,7 @@
 import "./styles/style.scss";
 import { getStartSettings, initSettings, renderSettings } from "./settings";
-import { startGame } from "./game";
+import { getGameView, startGame } from "./game";
+import { renderGame } from "./game-screen";
 import controllerIcon from "./assets/icons/stadia-controller.svg?raw";
 import arrowDefault from "./assets/icons/arrow-right.svg";
 import arrowBold from "./assets/icons/arrow-right-bold.svg";
@@ -60,17 +61,14 @@ function showSettings(): void {
   initSettings(showGame);
 }
 
-/** Starts a game from the chosen settings and renders the game placeholder. */
+/** Starts a game from the chosen settings and renders the game screen. */
 function showGame(): void {
   const settings = getStartSettings();
   if (!settings) return;
   startGame(settings.theme, settings.fieldSize, settings.player);
-  CONTENT.innerHTML = renderGamePlaceholder();
-}
-
-/** Returns a temporary placeholder for the game screen. */
-function renderGamePlaceholder(): string {
-  return `<section class="game"><h1>Game</h1></section>`;
+  const view = getGameView();
+  if (!view) return;
+  CONTENT.innerHTML = renderGame(view);
 }
 
 init();
