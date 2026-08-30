@@ -34,10 +34,22 @@ export interface GameState {
   waitingCards: Card[];
   scores: Record<Player, number>;
   currentPlayer: Player;
+  theme: Theme;
+  fieldSize: FieldSize;
 }
 
 export interface StartSettings {
   theme: Theme;
   player: Player;
   fieldSize: FieldSize;
+}
+
+/** Read-only snapshot of the running game for the render layer. */
+export interface GameView {
+  readonly cards: readonly CardData[];
+  readonly theme: Theme;
+  readonly fieldSize: FieldSize;
+  readonly currentPlayer: Player;
+  readonly scoreBlue: number;
+  readonly scoreOrange: number;
 }

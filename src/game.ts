@@ -1,5 +1,5 @@
 import { Card } from "./card";
-import type { Theme, FieldSize, Player, GameState } from "./types";
+import type { Theme, FieldSize, Player, GameState, GameView } from "./types";
 import { CARD_MOTIF_COUNTS, FIELD_SIZE_PAIRS } from "./types";
 
 let gameState: GameState | null = null;
@@ -43,6 +43,8 @@ export function startGame(theme: Theme, fieldSize: FieldSize, startPlayer: Playe
     waitingCards: [],
     scores: { blue: 0, orange: 0 },
     currentPlayer: startPlayer,
+    theme,
+    fieldSize,
   };
   return gameState;
 }
@@ -87,4 +89,17 @@ function clearWaitingCards(): void {
   gameState.waitingCards[0].flipBack();
   gameState.waitingCards[1].flipBack();
   gameState.waitingCards = [];
+}
+
+/** Returns a read-only snapshot of the current game for rendering. */
+export function getGameView(): GameView | null {
+  if (!gameState) return null;
+  return {
+    cards: gameState.cards,
+    theme: gameState.theme,
+    fieldSize: gameState.fieldSize,
+    currentPlayer: gameState.currentPlayer,
+    scoreBlue: gameState.scores.blue,
+    scoreOrange: gameState.scores.orange,
+  };
 }
