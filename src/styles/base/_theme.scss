@@ -8,5 +8,11 @@
     --game-font: #{map.get($colors, "game-font")};
     --player-blue-display: #{map.get($colors, "player-blue-display")};
     --player-orange-display: #{map.get($colors, "player-orange-display")};
+    --card-back: #{map.get($colors, "card-back")};
+    --card-front: #{map.get($colors, "card-front")};
+    --card-radius: #{map.get($colors, "card-radius")};
+    --card-shadow: #{map.get($colors, "card-shadow")};
+    --card-width: #{map.get($colors, "card-width")};
+    --card-height: #{map.get($colors, "card-height")};
   }
 }

@@ -3,22 +3,20 @@
 .board {
   display: grid;
   justify-content: center;
+  grid-auto-rows: var(--card-height);
 
   &--4x4 {
-    grid-template-columns: repeat(4, var.$card-width-4x4);
-    grid-auto-rows: var.$card-height-4x4;
+    grid-template-columns: repeat(4, var(--card-width));
     gap: var.$board-gap-4x4;
   }
 
   &--4x6 {
-    grid-template-columns: repeat(6, var.$card-width-4x6);
-    grid-auto-rows: var.$card-height-4x6;
+    grid-template-columns: repeat(6, var(--card-width));
     gap: var.$board-gap-4x6;
   }
 
   &--6x6 {
-    grid-template-columns: repeat(6, var.$card-width-6x6);
-    grid-auto-rows: var.$card-height-6x6;
+    grid-template-columns: repeat(6, var(--card-width));
     gap: var.$board-gap-6x6;
   }
 }

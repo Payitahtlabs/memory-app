@@ -5,6 +5,12 @@ $themes: (
     "game-font": ("Red Rose", sans-serif),
     "player-blue-display": #2bb1ff,
     "player-orange-display": #f58e39,
+    "card-back": linear-gradient(212deg, #4dd5bc 29%, #286f62 124%),
+    "card-front": #e8f3f0,
+    "card-radius": 0,
+    "card-shadow": none,
+    "card-width": 120px,
+    "card-height": 120px,
   ),
   "gaming": (
     "game-bg": #294f60,
@@ -12,6 +18,12 @@ $themes: (
     "game-font": ("Orbitron", sans-serif),
     "player-blue-display": #097fc5,
     "player-orange-display": #ea6900,
+    "card-back": linear-gradient(144deg, #ed1b76 1%, #0a2835 143%),
+    "card-front": #f6f1f3,
+    "card-radius": 12px,
+    "card-shadow": 6px 6px 6px rgba(0, 0, 0, 0.25),
+    "card-width": 105px,
+    "card-height": 120px,
   ),
   "da-projects": (
     "game-bg": #ffffff,
@@ -19,6 +31,12 @@ $themes: (
     "game-font": ("Figtree", sans-serif),
     "player-blue-display": #097fc5,
     "player-orange-display": #ea6900,
+    "card-back": #1e7594,
+    "card-front": #eaf2f4,
+    "card-radius": 13px,
+    "card-shadow": none,
+    "card-width": 120px,
+    "card-height": 100px,
   ),
 );
 

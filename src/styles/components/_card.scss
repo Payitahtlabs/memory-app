@@ -5,7 +5,9 @@
   height: 100%;
   padding: 0;
   border: none;
+  border-radius: var(--card-radius);
   background: none;
+  box-shadow: var(--card-shadow);
   font: inherit;
   cursor: pointer;
 
@@ -26,6 +28,11 @@
 
   &__front {
     visibility: hidden;
+    background: var(--card-front);
+  }
+
+  &__back {
+    background: var(--card-back);
   }
 
   &--flipped &__front,
