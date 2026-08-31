@@ -18,6 +18,9 @@
     --header-letter-spacing: #{map.get($colors, "header-letter-spacing")};
     --exit-border: #{map.get($colors, "exit-border")};
     --exit-bg: #{map.get($colors, "exit-bg")};
+    --exit-hover-bg: #{map.get($colors, "exit-hover-bg")};
+    --exit-hover-shadow: #{map.get($colors, "exit-hover-shadow")};
+    --exit-hover-icon: #{map.get($colors, "exit-hover-icon")};
     --exit-letter-spacing: #{map.get($colors, "exit-letter-spacing")};
     --current-color: #{map.get($colors, "current-color")};
   }

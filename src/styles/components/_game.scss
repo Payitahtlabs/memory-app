@@ -1,7 +1,12 @@
 .game {
   min-height: 100vh;
+  padding-top: 40px;
   background-color: var(--game-bg);
   color: var(--game-text);
+
+  &:has(.board--6x6) {
+    padding-top: 10px;
+  }
 
   &__header {
     display: flex;
@@ -106,11 +111,23 @@
     font-weight: 700;
     letter-spacing: var(--exit-letter-spacing);
     cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: var(--exit-hover-bg);
+      box-shadow: var(--exit-hover-shadow);
+      color: #ffffff;
+    }
+
+    &:hover svg {
+      color: var(--exit-hover-icon);
+    }
   }
 
   &__exit svg {
     width: 26px;
     height: 23px;
+    transition: color 0.2s ease;
   }
 
   &__header--code-vibes &__scores {
