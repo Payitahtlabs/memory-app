@@ -11,6 +11,12 @@ $themes: (
     "card-shadow": none,
     "card-width": 120px,
     "card-height": 120px,
+    "header-bar": transparent,
+    "header-letter-spacing": normal,
+    "exit-border": 1px solid #4dd5bc,
+    "exit-bg": rgba(#86e9d6, 0.2),
+    "exit-letter-spacing": normal,
+    "current-color": #ffffff,
   ),
   "gaming": (
     "game-bg": #294f60,
@@ -24,6 +30,12 @@ $themes: (
     "card-shadow": 6px 6px 6px rgba(0, 0, 0, 0.25),
     "card-width": 105px,
     "card-height": 120px,
+    "header-bar": rgba(#fd96c9, 0.2),
+    "header-letter-spacing": 2.24px,
+    "exit-border": 2px solid #e71c4f,
+    "exit-bg": rgba(#ed1b76, 0.08),
+    "exit-letter-spacing": 0.8px,
+    "current-color": #ffffff,
   ),
   "da-projects": (
     "game-bg": #ffffff,
@@ -37,6 +49,12 @@ $themes: (
     "card-shadow": none,
     "card-width": 120px,
     "card-height": 100px,
+    "header-bar": #f0f3f4,
+    "header-letter-spacing": normal,
+    "exit-border": none,
+    "exit-bg": #bfe5f2,
+    "exit-letter-spacing": normal,
+    "current-color": #1e7594,
   ),
 );
 

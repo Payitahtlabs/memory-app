@@ -10,17 +10,37 @@
     width: 1218px;
     height: 102px;
     margin: 0 auto 54px;
+    padding: 24px;
+    border-radius: 10px;
+    background: var(--header-bar);
     font-family: var(--game-font);
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: var(--header-letter-spacing);
 
     &--code-vibes {
       height: 62px;
+      padding: 0;
+      border-radius: 0;
+      font-size: 24px;
     }
+  }
+
+  &__scores {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    height: 54px;
+    padding-inline: 16px;
+    border-radius: 10px;
+    margin: 0;
+    background: #ffffff;
   }
 
   &__score {
     display: flex;
     align-items: center;
-    margin: 0;
+    gap: 8px;
 
     &--blue {
       color: var(--player-blue-display);
@@ -29,19 +49,115 @@
     &--orange {
       color: var(--player-orange-display);
     }
+  }
+
+  &__score svg {
+    width: 22px;
+    height: 28px;
+  }
+
+  &__score-value {
+    font-size: 30px;
   }
 
   &__current {
+    display: flex;
+    align-items: center;
+    gap: 18px;
     margin: 0;
+    color: var(--current-color);
+    font-size: 32px;
   }
 
   &__current-player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 41px;
+    height: 40px;
+    border-radius: 3px;
+    color: #ffffff;
+
     &--blue {
-      color: var(--player-blue-display);
+      background: var(--player-blue-display);
     }
 
     &--orange {
-      color: var(--player-orange-display);
+      background: var(--player-orange-display);
     }
+  }
+
+  &__current-player svg {
+    width: 25px;
+    height: 32px;
+  }
+
+  &__exit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border: var(--exit-border);
+    border-radius: 10px;
+    background: var(--exit-bg);
+    color: var(--current-color);
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: var(--exit-letter-spacing);
+    cursor: pointer;
+  }
+
+  &__exit svg {
+    width: 26px;
+    height: 23px;
+  }
+
+  &__header--code-vibes &__scores {
+    height: auto;
+    gap: 20px;
+    padding: 17px 20px;
+    border-radius: 0;
+    background: rgba(#86e9d6, 0.2);
+  }
+
+  &__header--code-vibes &__score svg {
+    width: 24px;
+    height: 20px;
+  }
+
+  &__header--code-vibes &__score-label {
+    font-size: 24px;
+  }
+
+  &__header--code-vibes &__score-value {
+    font-size: 26px;
+    font-weight: 400;
+  }
+
+  &__header--code-vibes &__current-player {
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  &__header--code-vibes &__current-player--blue {
+    color: var(--player-blue-display);
+  }
+
+  &__header--code-vibes &__current-player--orange {
+    color: var(--player-orange-display);
+  }
+
+  &__header--code-vibes &__current-player svg {
+    width: 29px;
+    height: 24px;
+  }
+
+  &__header--code-vibes &__exit {
+    padding: 16px 24px;
+    border-radius: 0;
+    font-size: 24px;
   }
 }
