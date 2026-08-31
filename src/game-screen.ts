@@ -72,7 +72,7 @@ function renderBoard(view: GameView): string {
   `;
 }
 
-/** Returns a single card with its motif, its watermark back and its current state. */
+/** Returns a single card with its motif, its themed back and its current state. */
 function renderCard(card: CardData, theme: Theme): string {
   const motifNumber = String(card.motifId).padStart(2, "0");
   const motifUrl = new URL(`./assets/cards/${theme}-card-${motifNumber}.png`, import.meta.url).href;
@@ -80,20 +80,23 @@ function renderCard(card: CardData, theme: Theme): string {
   const matched = card.isMatched ? " card--matched" : "";
   return `
     <button class="card${flipped}${matched}" type="button" data-card-id="${card.id}">
-      ${renderCardFaces(motifUrl, card.motifId)}
+      ${renderCardFaces(motifUrl, card.motifId, theme)}
     </button>
   `;
 }
 
-/** Returns the flippable inner faces of a card, motif in front and watermark behind. */
-function renderCardFaces(motifUrl: string, motifId: number): string {
+/** Returns the flippable inner faces of a card; the gaming theme leaves the back bare. */
+function renderCardFaces(motifUrl: string, motifId: number, theme: Theme): string {
+  const watermark = theme === "gaming"
+    ? ""
+    : `<img class="card__watermark" src="${BACK_URL}" alt="" />`;
   return `
     <span class="card__inner">
       <span class="card__front">
         <img class="card__motif" src="${motifUrl}" alt="Card motif ${motifId}" />
       </span>
       <span class="card__back">
-        <img class="card__watermark" src="${BACK_URL}" alt="" />
+        ${watermark}
       </span>
     </span>
   `;
