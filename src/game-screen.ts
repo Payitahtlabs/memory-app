@@ -1,5 +1,5 @@
 import type { CardData, GameView, Player, Theme } from "./types";
-import { handleCardClick } from "./game";
+import { getGameView, handleCardClick } from "./game";
 
 const BACK_URL = new URL("./assets/cards/card-back-watermark.png", import.meta.url).href;
 
@@ -138,12 +138,24 @@ function renderCardFaces(motifUrl: string, motifId: number, theme: Theme): strin
   `;
 }
 
-/** Resolves a click on the board to a card id and forwards it to the game logic. */
+/** Mirrors the flipped and matched state of every card onto its button. */
+function syncCards(cards: readonly CardData[]): void {
+  cards.forEach((card) => {
+    const button = document.querySelector(`[data-card-id="${card.id}"]`) as HTMLElement;
+    button.classList.toggle("card--flipped", card.isFlipped);
+    button.classList.toggle("card--matched", card.isMatched);
+  });
+}
+
+/** Resolves a click to a card id, forwards it to the game logic and syncs the cards. */
 function onBoardClick(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return;
   const card = event.target.closest<HTMLElement>('[data-card-id]');
   if (!card) return;
   handleCardClick(Number(card.dataset.cardId));
+  const view = getGameView();
+  if (!view) return;
+  syncCards(view.cards);
 }
 
 /** Attaches the click handler to the rendered board. */
