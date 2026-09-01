@@ -26,11 +26,14 @@
     inset: 0;
     display: grid;
     place-items: center;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
     border-radius: var(--card-radius);
     backface-visibility: hidden;
   }
 
   &__front {
+    padding: var(--card-padding);
     background: var(--card-front);
     transform: rotateY(180deg);
   }
@@ -44,9 +47,13 @@
     transform: rotateY(180deg);
   }
 
-  &__motif,
-  &__watermark {
+  &__motif {
     max-width: 100%;
     max-height: 100%;
+  }
+
+  &__watermark {
+    width: var(--card-watermark-width);
+    height: auto;
   }
 }

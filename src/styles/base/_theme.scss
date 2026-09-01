@@ -14,6 +14,8 @@
     --card-shadow: #{map.get($colors, "card-shadow")};
     --card-width: #{map.get($colors, "card-width")};
     --card-height: #{map.get($colors, "card-height")};
+    --card-padding: #{map.get($colors, "card-padding")};
+    --card-watermark-width: #{map.get($colors, "card-watermark-width")};
     --header-bar: #{map.get($colors, "header-bar")};
     --header-letter-spacing: #{map.get($colors, "header-letter-spacing")};
     --exit-border: #{map.get($colors, "exit-border")};
