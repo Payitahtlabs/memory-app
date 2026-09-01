@@ -1,6 +1,5 @@
 .card {
   position: relative;
-  overflow: hidden;
   width: 100%;
   height: 100%;
   padding: 0;
@@ -10,12 +9,15 @@
   box-shadow: var(--card-shadow);
   font: inherit;
   cursor: pointer;
+  perspective: 1000px;
 
   &__inner {
     display: block;
     position: relative;
     width: 100%;
     height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease;
   }
 
   &__front,
@@ -24,25 +26,22 @@
     inset: 0;
     display: grid;
     place-items: center;
+    border-radius: var(--card-radius);
+    backface-visibility: hidden;
   }
 
   &__front {
-    visibility: hidden;
     background: var(--card-front);
+    transform: rotateY(180deg);
   }
 
   &__back {
     background: var(--card-back);
   }
 
-  &--flipped &__front,
-  &--matched &__front {
-    visibility: visible;
-  }
-
-  &--flipped &__back,
-  &--matched &__back {
-    visibility: hidden;
+  &--flipped &__inner,
+  &--matched &__inner {
+    transform: rotateY(180deg);
   }
 
   &__motif,
