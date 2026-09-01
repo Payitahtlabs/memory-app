@@ -147,7 +147,15 @@ function syncCards(cards: readonly CardData[]): void {
   });
 }
 
-/** Resolves a click to a card id, forwards it to the game logic and syncs the cards. */
+/** Writes both players' scores into the score box. */
+function syncScores(view: GameView): void {
+  const blue = document.querySelector(".game__score--blue .game__score-value") as HTMLElement;
+  const orange = document.querySelector(".game__score--orange .game__score-value") as HTMLElement;
+  blue.textContent = String(view.scoreBlue);
+  orange.textContent = String(view.scoreOrange);
+}
+
+/** Resolves a click to a card id, forwards it to the game logic and syncs the screen. */
 function onBoardClick(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return;
   const card = event.target.closest<HTMLElement>('[data-card-id]');
@@ -156,6 +164,7 @@ function onBoardClick(event: MouseEvent): void {
   const view = getGameView();
   if (!view) return;
   syncCards(view.cards);
+  syncScores(view);
 }
 
 /** Attaches the click handler to the rendered board. */
