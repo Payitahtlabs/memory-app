@@ -155,6 +155,14 @@ function syncScores(view: GameView): void {
   orange.textContent = String(view.scoreOrange);
 }
 
+/** Marks the current player on the badge by swapping its modifier and label. */
+function syncCurrentPlayer(currentPlayer: Player): void {
+  const badge = document.querySelector(".game__current-player") as HTMLElement;
+  badge.classList.toggle("game__current-player--blue", currentPlayer === "blue");
+  badge.classList.toggle("game__current-player--orange", currentPlayer === "orange");
+  badge.setAttribute("aria-label", currentPlayer);
+}
+
 /** Resolves a click to a card id, forwards it to the game logic and syncs the screen. */
 function onBoardClick(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return;
@@ -165,6 +173,7 @@ function onBoardClick(event: MouseEvent): void {
   if (!view) return;
   syncCards(view.cards);
   syncScores(view);
+  syncCurrentPlayer(view.currentPlayer);
 }
 
 /** Attaches the click handler to the rendered board. */
