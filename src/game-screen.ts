@@ -1,4 +1,5 @@
 import type { CardData, GameView, Player, Theme } from "./types";
+import { handleCardClick } from "./game";
 
 const BACK_URL = new URL("./assets/cards/card-back-watermark.png", import.meta.url).href;
 
@@ -135,4 +136,18 @@ function renderCardFaces(motifUrl: string, motifId: number, theme: Theme): strin
       </span>
     </span>
   `;
+}
+
+/** Resolves a click on the board to a card id and forwards it to the game logic. */
+function onBoardClick(event: MouseEvent): void {
+  if (!(event.target instanceof Element)) return;
+  const card = event.target.closest<HTMLElement>('[data-card-id]');
+  if (!card) return;
+  handleCardClick(Number(card.dataset.cardId));
+}
+
+/** Attaches the click handler to the rendered board. */
+export function initGame(): void {
+  const board = document.querySelector(".board") as HTMLElement;
+  board.addEventListener("click", onBoardClick);
 }

@@ -1,7 +1,7 @@
 import "./styles/style.scss";
 import { getStartSettings, initSettings, renderSettings } from "./settings";
 import { getGameView, startGame } from "./game";
-import { renderGame } from "./game-screen";
+import { renderGame, initGame } from "./game-screen";
 import controllerIcon from "./assets/icons/stadia-controller.svg?raw";
 import arrowDefault from "./assets/icons/arrow-right.svg";
 import arrowBold from "./assets/icons/arrow-right-bold.svg";
@@ -69,6 +69,7 @@ function showGame(): void {
   const view = getGameView();
   if (!view) return;
   CONTENT.innerHTML = renderGame(view);
+  initGame();
 }
 
 init();
