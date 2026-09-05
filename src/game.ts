@@ -1,5 +1,5 @@
 import { Card } from "./card";
-import type { Theme, FieldSize, Player, GameState, GameView } from "./types";
+import type { Theme, FieldSize, Player, GameState, GameView, GameResult } from "./types";
 import { CARD_MOTIF_COUNTS, FIELD_SIZE_PAIRS } from "./types";
 
 let gameState: GameState | null = null;
@@ -102,4 +102,18 @@ export function getGameView(): GameView | null {
     scoreBlue: gameState.scores.blue,
     scoreOrange: gameState.scores.orange,
   };
+}
+
+/** Tells whether every card has been matched. */
+function isGameOver(): boolean {
+  if (!gameState) return false;
+  return gameState.cards.every((card) => card.isMatched);
+}
+
+/** Returns the winner once the game is over, "draw" on equal scores, null while it runs. */
+export function getResult(): GameResult | null {
+  if (!gameState || !isGameOver()) return null;
+  const { blue, orange } = gameState.scores;
+  if (blue === orange) return "draw";
+  return blue > orange ? "blue" : "orange";
 }

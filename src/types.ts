@@ -1,6 +1,7 @@
 import type { Card } from "./card";
 
 export type Player = "blue" | "orange";
+export type GameResult = Player | "draw";
 export type Theme = "code-vibes" | "gaming" | "da-projects";
 export type FieldSize = "4x4" | "4x6" | "6x6";
 
