@@ -20,6 +20,7 @@ export function renderGame(view: GameView): string {
     <section class="game">
       ${renderGameHeader(view)}
       ${renderBoard(view)}
+      ${renderExitDialog(view.theme)}
     </section>
   `;
 }
@@ -98,6 +99,23 @@ function renderExitButton(): string {
   `;
 }
 
+/** Returns the confirmation dialog shown before leaving the game. */
+function renderExitDialog(theme: Theme): string {
+  const stayLabel = theme === "gaming" ? "No, back to game" : "Back to game";
+  const quitLabel = theme === "gaming" ? "Yes, quit game" : "Exit game";
+  return `
+    <dialog class="exit-dialog">
+      <form class="exit-dialog__panel" method="dialog">
+        <p class="exit-dialog__question">Are you sure you want to quit the game?</p>
+        <div class="exit-dialog__actions">
+          <button class="exit-dialog__button exit-dialog__button--stay" value="stay">${stayLabel}</button>
+          <button class="exit-dialog__button exit-dialog__button--quit" value="quit">${quitLabel}</button>
+        </div>
+      </form>
+    </dialog>
+  `;
+}
+
 /** Returns the board container sized by the field size, filled with all cards. */
 function renderBoard(view: GameView): string {
   const cards = view.cards.map((card) => renderCard(card, view.theme)).join("");
@@ -163,6 +181,12 @@ function syncCurrentPlayer(currentPlayer: Player): void {
   badge.setAttribute("aria-label", currentPlayer);
 }
 
+/** Closes the dialog when the backdrop itself is clicked, not its content. */
+function onDialogClick(event: MouseEvent): void {
+  if (event.target !== event.currentTarget) return;
+  (event.currentTarget as HTMLDialogElement).close();
+}
+
 /** Resolves a click to a card id, forwards it to the game logic and syncs the screen. */
 function onBoardClick(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return;
@@ -176,8 +200,20 @@ function onBoardClick(event: MouseEvent): void {
   syncCurrentPlayer(view.currentPlayer);
 }
 
-/** Attaches the click handler to the rendered board. */
-export function initGame(): void {
+/** Wires the exit button and its dialog; leaving the game is handed to the given callback. */
+function initExitDialog(onExit: () => void): void {
+  const exitButton = document.querySelector(".game__exit") as HTMLElement;
+  const dialog = document.querySelector(".exit-dialog") as HTMLDialogElement;
+  exitButton.addEventListener("click", () => dialog.showModal());
+  dialog.addEventListener("click", onDialogClick);
+  dialog.addEventListener("close", () => {
+    if (dialog.returnValue === "quit") onExit();
+  });
+}
+
+/** Attaches the click handler to the rendered board and wires the exit dialog. */
+export function initGame(onExit: () => void): void {
   const board = document.querySelector(".board") as HTMLElement;
   board.addEventListener("click", onBoardClick);
+  initExitDialog(onExit);
 }

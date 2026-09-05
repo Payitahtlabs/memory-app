@@ -69,7 +69,7 @@ function showGame(): void {
   const view = getGameView();
   if (!view) return;
   CONTENT.innerHTML = renderGame(view);
-  initGame();
+  initGame(showSettings);
 }
 
 init();
