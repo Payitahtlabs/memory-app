@@ -114,13 +114,15 @@
     cursor: pointer;
     transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 
-    &:hover {
+    &:hover,
+    .game:has(.exit-dialog[open]) & {
       background: var(--exit-hover-bg);
       box-shadow: var(--exit-hover-shadow);
       color: #ffffff;
     }
 
-    &:hover svg {
+    &:hover svg,
+    .game:has(.exit-dialog[open]) & svg {
       color: var(--exit-hover-icon);
     }
   }

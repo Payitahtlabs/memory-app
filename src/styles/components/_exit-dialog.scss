@@ -1,0 +1,108 @@
+.exit-dialog {
+  width: var(--dialog-width);
+  padding: 0;
+  border: none;
+  border-radius: var(--dialog-radius);
+  background: var(--dialog-bg);
+  color: var(--dialog-text);
+  font-family: var(--game-font);
+  opacity: var(--dialog-enter-opacity);
+  transform: var(--dialog-enter);
+  transition:
+    transform 0.4s ease-out,
+    opacity 0.4s ease-out,
+    display 0.4s allow-discrete,
+    overlay 0.4s allow-discrete;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transition:
+      opacity 0.4s ease-out,
+      display 0.4s allow-discrete,
+      overlay 0.4s allow-discrete;
+  }
+
+  &[open] {
+    opacity: 1;
+    transform: translateY(0);
+
+    &::backdrop {
+      opacity: 1;
+    }
+
+    @starting-style {
+      opacity: var(--dialog-enter-opacity);
+      transform: var(--dialog-enter);
+
+      &::backdrop {
+        opacity: 0;
+      }
+    }
+  }
+
+  &__panel {
+    display: grid;
+    gap: 54px;
+    padding: 40px;
+  }
+
+  &__question {
+    margin: 0;
+    font-size: var(--dialog-font-size);
+    font-weight: 700;
+    line-height: 40px;
+    letter-spacing: var(--dialog-letter-spacing);
+    text-align: center;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  &__button {
+    padding: var(--dialog-button-padding);
+    border: none;
+    border-radius: var(--dialog-button-radius);
+    font: inherit;
+    font-size: var(--dialog-button-font-size);
+    font-weight: 700;
+    letter-spacing: var(--dialog-button-letter-spacing);
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  }
+
+  &__button--stay {
+    background: var(--stay-bg);
+    box-shadow: var(--stay-shadow);
+    color: var(--stay-text);
+
+    &:hover {
+      background: var(--stay-hover-bg);
+      box-shadow: var(--stay-hover-shadow);
+      color: var(--stay-hover-text);
+    }
+  }
+
+  &__button--quit {
+    background: var(--quit-bg);
+    box-shadow: var(--quit-shadow);
+    color: var(--quit-text);
+
+    &:hover {
+      background: var(--quit-hover-bg);
+      box-shadow: var(--quit-hover-shadow);
+      color: var(--quit-hover-text);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &::backdrop {
+      transition: none;
+    }
+  }
+}
