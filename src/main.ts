@@ -11,7 +11,7 @@ import arrowBold from "./assets/icons/arrow-right-bold.svg";
 const CONTENT = document.getElementById("content") as HTMLElement;
 
 const FLIP_DURATION_MS = 400;
-const GAME_OVER_DELAY_MS = 1200;
+const GAME_OVER_DELAY_MS = 1500;
 
 /** Starts the app on the homescreen. */
 function init(): void {
