@@ -126,6 +126,14 @@
     background-size: 1234px auto;
   }
 
+  @media (min-width: 1440px) {
+    &--blue,
+    &--orange {
+      background-image: var(--result-confetti-wide);
+      background-size: 3252px auto;
+    }
+  }
+
   &--draw &__title {
     color: var(--draw-title-color);
     font-size: 128px;
