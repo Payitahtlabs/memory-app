@@ -69,10 +69,10 @@ function renderResultTitle(result: GameResult, theme: Theme): string {
 function renderResultFigure(result: GameResult, theme: Theme): string {
   if (result === "draw") {
     const scaleUrl = new URL(`./assets/game-over/scale-${theme}.svg`, import.meta.url).href;
-    return `<img class="result__figure" src="${scaleUrl}" alt="" />`;
+    return `<img class="result__figure result__figure--scale" src="${scaleUrl}" alt="" />`;
   }
   if (theme === "gaming") {
-    return `<img class="result__figure" src="${TROPHY_URL}" alt="" />`;
+    return `<img class="result__figure result__figure--trophy" src="${TROPHY_URL}" alt="" />`;
   }
   return `<span class="result__figure result__figure--pawn" aria-hidden="true">${PAWN_SVG}</span>`;
 }
