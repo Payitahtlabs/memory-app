@@ -1,54 +1,9 @@
-@use "sass:map";
 @use "../abstract" as *;
 
-@each $theme, $colors in $themes {
+@each $theme, $props in $themes {
   body[data-theme="#{$theme}"] {
-    --game-bg: #{map.get($colors, "game-bg")};
-    --game-text: #{map.get($colors, "game-text")};
-    --game-font: #{map.get($colors, "game-font")};
-    --player-blue-display: #{map.get($colors, "player-blue-display")};
-    --player-orange-display: #{map.get($colors, "player-orange-display")};
-    --card-back: #{map.get($colors, "card-back")};
-    --card-front: #{map.get($colors, "card-front")};
-    --card-radius: #{map.get($colors, "card-radius")};
-    --card-shadow: #{map.get($colors, "card-shadow")};
-    --card-width: #{map.get($colors, "card-width")};
-    --card-height: #{map.get($colors, "card-height")};
-    --card-padding: #{map.get($colors, "card-padding")};
-    --card-watermark-width: #{map.get($colors, "card-watermark-width")};
-    --header-bar: #{map.get($colors, "header-bar")};
-    --header-letter-spacing: #{map.get($colors, "header-letter-spacing")};
-    --exit-padding: #{map.get($colors, "exit-padding")};
-    --exit-border: #{map.get($colors, "exit-border")};
-    --exit-bg: #{map.get($colors, "exit-bg")};
-    --exit-hover-bg: #{map.get($colors, "exit-hover-bg")};
-    --exit-hover-shadow: #{map.get($colors, "exit-hover-shadow")};
-    --exit-hover-icon: #{map.get($colors, "exit-hover-icon")};
-    --exit-letter-spacing: #{map.get($colors, "exit-letter-spacing")};
-    --current-color: #{map.get($colors, "current-color")};
-    --dialog-width: #{map.get($colors, "dialog-width")};
-    --dialog-radius: #{map.get($colors, "dialog-radius")};
-    --dialog-bg: #{map.get($colors, "dialog-bg")};
-    --dialog-text: #{map.get($colors, "dialog-text")};
-    --dialog-enter: #{map.get($colors, "dialog-enter")};
-    --dialog-enter-opacity: #{map.get($colors, "dialog-enter-opacity")};
-    --dialog-font-size: #{map.get($colors, "dialog-font-size")};
-    --dialog-letter-spacing: #{map.get($colors, "dialog-letter-spacing")};
-    --dialog-button-padding: #{map.get($colors, "dialog-button-padding")};
-    --dialog-button-radius: #{map.get($colors, "dialog-button-radius")};
-    --dialog-button-font-size: #{map.get($colors, "dialog-button-font-size")};
-    --dialog-button-letter-spacing: #{map.get($colors, "dialog-button-letter-spacing")};
-    --stay-bg: #{map.get($colors, "stay-bg")};
-    --stay-shadow: #{map.get($colors, "stay-shadow")};
-    --stay-text: #{map.get($colors, "stay-text")};
-    --stay-hover-bg: #{map.get($colors, "stay-hover-bg")};
-    --stay-hover-shadow: #{map.get($colors, "stay-hover-shadow")};
-    --stay-hover-text: #{map.get($colors, "stay-hover-text")};
-    --quit-bg: #{map.get($colors, "quit-bg")};
-    --quit-shadow: #{map.get($colors, "quit-shadow")};
-    --quit-text: #{map.get($colors, "quit-text")};
-    --quit-hover-bg: #{map.get($colors, "quit-hover-bg")};
-    --quit-hover-shadow: #{map.get($colors, "quit-hover-shadow")};
-    --quit-hover-text: #{map.get($colors, "quit-hover-text")};
+    @each $key, $value in $props {
+      --#{$key}: #{$value};
+    }
   }
 }
