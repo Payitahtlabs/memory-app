@@ -1,5 +1,5 @@
-import type { CardData, GameView, Player, Theme } from "./types";
-import { getGameView, handleCardClick } from "./game";
+import type { CardData, GameResult, GameView, Player, Theme } from "./types";
+import { getGameView, getResult, handleCardClick } from "./game";
 
 const BACK_URL = new URL("./assets/cards/card-back-watermark.png", import.meta.url).href;
 
@@ -211,9 +211,16 @@ function initExitDialog(onExit: () => void): void {
   });
 }
 
-/** Attaches the click handler to the rendered board and wires the exit dialog. */
-export function initGame(onExit: () => void): void {
+/** Wires the board and the exit dialog; the first game result is handed to the callback once. */
+export function initGame(onExit: () => void, onGameOver: (result: GameResult) => void): void {
   const board = document.querySelector(".board") as HTMLElement;
-  board.addEventListener("click", onBoardClick);
+  const onClick = (event: MouseEvent): void => {
+    onBoardClick(event);
+    const result = getResult();
+    if (!result) return;
+    board.removeEventListener("click", onClick);
+    onGameOver(result);
+  };
+  board.addEventListener("click", onClick);
   initExitDialog(onExit);
 }

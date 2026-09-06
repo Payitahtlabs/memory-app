@@ -2,14 +2,24 @@ import "./styles/style.scss";
 import { getStartSettings, initSettings, renderSettings } from "./settings";
 import { getGameView, startGame } from "./game";
 import { renderGame, initGame } from "./game-screen";
+import { initResult, renderGameOver, renderResult } from "./game-over-screen";
+import type { GameResult } from "./types";
 import controllerIcon from "./assets/icons/stadia-controller.svg?raw";
 import arrowDefault from "./assets/icons/arrow-right.svg";
 import arrowBold from "./assets/icons/arrow-right-bold.svg";
 
 const CONTENT = document.getElementById("content") as HTMLElement;
 
-/** Renders the homescreen and wires up its interactions. */
+const FLIP_DURATION_MS = 400;
+const GAME_OVER_DELAY_MS = 1200;
+
+/** Starts the app on the homescreen. */
 function init(): void {
+  showHome();
+}
+
+/** Replaces the current screen with the homescreen and wires it up. */
+function showHome(): void {
   CONTENT.innerHTML = renderHomescreen();
   initPlayButton();
 }
@@ -69,7 +79,25 @@ function showGame(): void {
   const view = getGameView();
   if (!view) return;
   CONTENT.innerHTML = renderGame(view);
-  initGame(showSettings);
+  initGame(showSettings, showGameOver);
+}
+
+/** Lets the last flip finish, then shows the final score and, after a pause, the result. */
+function showGameOver(result: GameResult): void {
+  setTimeout(() => {
+    const view = getGameView();
+    if (!view) return;
+    CONTENT.innerHTML = renderGameOver(view);
+    setTimeout(() => showResult(result), GAME_OVER_DELAY_MS);
+  }, FLIP_DURATION_MS);
+}
+
+/** Replaces the current screen with the result screen and wires it up. */
+function showResult(result: GameResult): void {
+  const view = getGameView();
+  if (!view) return;
+  CONTENT.innerHTML = renderResult(result, view.theme);
+  initResult(showHome);
 }
 
 init();
