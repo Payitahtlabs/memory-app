@@ -1,3 +1,15 @@
+@keyframes stage-enter {
+  from {
+    opacity: var(--stage-enter-opacity);
+  }
+}
+
+@keyframes stage-content-enter {
+  from {
+    transform: var(--stage-enter);
+  }
+}
+
 .game-over {
   display: flex;
   flex-direction: column;
@@ -76,6 +88,12 @@
   color: var(--game-over-text);
   font-family: var(--game-font);
   letter-spacing: var(--header-letter-spacing);
+
+  animation: stage-enter var(--stage-enter-duration) ease-out;
+
+  > * {
+    animation: stage-content-enter var(--stage-enter-duration) ease-out;
+  }
 
   &__caption {
     margin: 0 0 8px;
@@ -177,6 +195,14 @@
       background: var(--home-hover-bg);
       box-shadow: var(--home-hover-shadow);
       color: var(--home-hover-color);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+
+    > * {
+      animation: none;
     }
   }
 }
