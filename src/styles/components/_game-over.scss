@@ -99,6 +99,15 @@
     color: var(--winner-title-orange);
   }
 
+  &--blue,
+  &--orange {
+    padding-top: var(--result-winner-padding-top);
+    background-image: var(--result-confetti);
+    background-repeat: no-repeat;
+    background-position: center -32px;
+    background-size: 1234px auto;
+  }
+
   &--draw &__title {
     color: var(--draw-title-color);
     font-size: 128px;

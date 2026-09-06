@@ -88,6 +88,8 @@ $themes: (
     "result-trophy-shadow": none,
     "winner-title-blue": #2bb1ff,
     "winner-title-orange": #f58e39,
+    "result-confetti": url("../../assets/game-over/confetti-code-vibes.png"),
+    "result-winner-padding-top": 318px,
   ),
   "gaming": (
     "game-bg": #294f60,
@@ -178,6 +180,8 @@ $themes: (
     "result-trophy-shadow": drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.25)),
     "winner-title-blue": #097fc5,
     "winner-title-orange": #ea6900,
+    "result-confetti": none,
+    "result-winner-padding-top": 192px,
   ),
   "da-projects": (
     "game-bg": #ffffff,
@@ -268,6 +272,8 @@ $themes: (
     "result-trophy-shadow": none,
     "winner-title-blue": #ffffff,
     "winner-title-orange": #ffffff,
+    "result-confetti": none,
+    "result-winner-padding-top": 192px,
   ),
 );
 
