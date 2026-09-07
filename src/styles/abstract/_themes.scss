@@ -283,9 +283,9 @@ $themes: (
     "result-confetti": none,
     "result-confetti-wide": none,
     "result-winner-padding-top": 192px,
-    "stage-enter": none,
-    "stage-enter-opacity": 0,
-    "stage-enter-duration": 0.3s,
+    "stage-enter": translateY(-100vh),
+    "stage-enter-opacity": 1,
+    "stage-enter-duration": 0.5s,
   ),
 );
 
