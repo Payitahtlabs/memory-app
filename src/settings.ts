@@ -61,6 +61,11 @@ const BAR_LABELS: Record<Theme | Player | FieldSize, string> = {
   "6x6": "Board-36 Cards",
 };
 
+const SETTINGS_STORAGE_KEY = "memory-settings";
+const THEMES: readonly Theme[] = ["code-vibes", "gaming", "da-projects"];
+const PLAYERS: readonly Player[] = ["blue", "orange"];
+const SIZES: readonly FieldSize[] = ["4x4", "4x6", "6x6"];
+
 /** Returns the complete settings screen markup. */
 export function renderSettings(): string {
   return `
@@ -226,8 +231,71 @@ function syncSettingsUi(): void {
   syncTheme();
 }
 
+/**
+ * Narrows an unknown value to one of the allowed string literals.
+ * @param value - the value of unknown shape
+ * @param allowed - the literal list that defines the type
+ * @returns whether the value is one of the allowed literals
+ */
+function isMember<T extends string>(value: unknown, allowed: readonly T[]): value is T {
+  return typeof value === "string" && (allowed as readonly string[]).includes(value);
+}
+
+/**
+ * Reads the stored settings entry.
+ * @returns the parsed value, or null when absent or unreadable
+ */
+function readStoredSettings(): unknown {
+  try {
+    const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    return raw === null ? null : JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Checks the radio input of a group that carries the given value.
+ * @param name - the radio group name
+ * @param value - the value to preselect
+ */
+function checkRadio(name: string, value: string): void {
+  const input = document.querySelector<HTMLInputElement>(`input[name="${name}"][value="${value}"]`);
+  if (input) input.checked = true;
+}
+
+/** Preselects the radios from the last stored selection, ignoring invalid data. */
+function restoreSettings(): void {
+  const stored = readStoredSettings();
+  if (typeof stored !== "object" || stored === null) return;
+  if ("theme" in stored && isMember(stored.theme, THEMES)) checkRadio("theme", stored.theme);
+  if ("player" in stored && isMember(stored.player, PLAYERS)) checkRadio("player", stored.player);
+  if ("fieldSize" in stored && isMember(stored.fieldSize, SIZES)) checkRadio("fieldSize", stored.fieldSize);
+}
+
+/**
+ * Stores the given selection for the next visit.
+ * @param settings - the completed selection to persist
+ */
+function saveSettings(settings: StartSettings): void {
+  try {
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+  } catch {}
+}
+
+/**
+ * Persists the current selection, then hands over to the start callback.
+ * @param onStart - callback that leaves the settings screen
+ */
+function handleStart(onStart: () => void): void {
+  const settings = getStartSettings();
+  if (settings) saveSettings(settings);
+  onStart();
+}
+
 /** Wires up the settings screen interactions and the start callback. */
 export function initSettings(onStart: () => void): void {
+  restoreSettings();
   gameSettings.theme = readChecked("theme") as Theme | null;
   gameSettings.player = readChecked("player") as Player | null;
   gameSettings.fieldSize = readChecked("fieldSize") as FieldSize | null;
@@ -235,7 +303,7 @@ export function initSettings(onStart: () => void): void {
   screen?.addEventListener("change", handleSettingsChange);
   syncSettingsUi();
   const button = document.querySelector(".settings__start");
-  button?.addEventListener("click", onStart);
+  button?.addEventListener("click", () => handleStart(onStart));
 }
 
 /** Returns the completed start settings, or null while a selection is missing. */
