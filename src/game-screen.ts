@@ -1,5 +1,6 @@
 import type { CardData, GameResult, GameView, Player, Theme } from "./types";
 import { getGameView, getResult, handleCardClick, hasOpenMismatch, hideMismatch, resolveMismatch } from "./game";
+import { boardTemplate, cardFacesTemplate, cardTemplate, currentPlayerTemplate, exitButtonTemplate, exitDialogTemplate, gameTemplate, headerTemplate, scoreGroupTemplate, scoreLabelTemplate, scoresTemplate, watermarkTemplate } from "./game-screen-templates";
 
 const BACK_URL = new URL("./assets/cards/card-back-watermark.png", import.meta.url).href;
 
@@ -20,149 +21,109 @@ export const PLAYER_LABELS: Record<Player, string> = {
   orange: "Orange",
 };
 
-/** Returns the complete game screen markup for the given view. */
+/**
+ * Returns the complete game screen markup for the given view.
+ * @param view - Snapshot of the running game.
+ * @returns The game screen markup.
+ */
 export function renderGame(view: GameView): string {
-  return `
-    <section class="game">
-      ${renderGameHeader(view)}
-      ${renderBoard(view)}
-      ${renderExitDialog(view.theme)}
-    </section>
-  `;
+  const header = renderGameHeader(view);
+  const board = renderBoard(view);
+  const dialog = renderExitDialog(view.theme);
+  return gameTemplate(header, board, dialog);
 }
 
-/** Returns the header markup, switching between the standard and the code-vibes layout. */
+/**
+ * Picks the header modifier, icon and labelling that the theme asks for.
+ * @param view - Snapshot of the running game.
+ * @returns The header markup.
+ */
 function renderGameHeader(view: GameView): string {
-  if (view.theme === "code-vibes") {
-    return renderCodeVibesHeader(view);
-  }
-  return renderStandardHeader(view);
+  const isCodeVibes = view.theme === "code-vibes";
+  const modifier = isCodeVibes ? " game__header--code-vibes" : "";
+  const icon = isCodeVibes ? LABEL_SVG : PAWN_SVG;
+  const scores = renderScores(view, isCodeVibes);
+  const currentPlayer = currentPlayerTemplate(view.currentPlayer, icon);
+  return headerTemplate(modifier, scores, currentPlayer, exitButtonTemplate(EXIT_ICON_SVG));
 }
 
-/** Returns the header shared by the gaming and da-projects themes. */
-function renderStandardHeader(view: GameView): string {
-  return `
-    <header class="game__header">
-      ${renderScores(view, false)}
-      ${renderCurrentPlayer(view.currentPlayer, PAWN_SVG)}
-      ${renderExitButton()}
-    </header>
-  `;
-}
-
-/** Returns the code-vibes header, which marks the players by label icons. */
-function renderCodeVibesHeader(view: GameView): string {
-  return `
-    <header class="game__header game__header--code-vibes">
-      ${renderScores(view, true)}
-      ${renderCurrentPlayer(view.currentPlayer, LABEL_SVG)}
-      ${renderExitButton()}
-    </header>
-  `;
-}
-
-/** Returns the shared score box holding both player groups, blue before orange. */
+/**
+ * Builds both player groups for the score box, blue before orange.
+ * @param view - Snapshot of the running game.
+ * @param withLabel - Whether each group also names its player.
+ * @returns The score box markup.
+ */
 function renderScores(view: GameView, withLabel: boolean): string {
-  return `
-    <p class="game__scores">
-      ${renderScoreGroup("blue", view.scoreBlue, withLabel)}
-      ${renderScoreGroup("orange", view.scoreOrange, withLabel)}
-    </p>
-  `;
+  const blue = renderScoreGroup("blue", view.scoreBlue, withLabel);
+  const orange = renderScoreGroup("orange", view.scoreOrange, withLabel);
+  return scoresTemplate(blue, orange);
 }
 
-/** Returns one player group inside the score box, optionally naming the player. */
+/**
+ * Picks the icon and the optional name of one player group.
+ * @param player - Player the group belongs to.
+ * @param score - Points scored by this player.
+ * @param withLabel - Whether the group also names its player.
+ * @returns The score group markup.
+ */
 function renderScoreGroup(player: Player, score: number, withLabel: boolean): string {
   const icon = withLabel ? LABEL_SVG : PAWN_SVG;
-  const label = withLabel
-    ? `<span class="game__score-label">${PLAYER_LABELS[player]}</span>`
-    : "";
-  return `
-    <span class="game__score game__score--${player}">
-      ${icon}
-      ${label}
-      <span class="game__score-value">${score}</span>
-    </span>
-  `;
+  const label = withLabel ? scoreLabelTemplate(PLAYER_LABELS[player]) : "";
+  return scoreGroupTemplate(player, icon, label, score);
 }
 
-/** Returns the current-player line with the player marked by a coloured badge. */
-function renderCurrentPlayer(currentPlayer: Player, icon: string): string {
-  return `
-    <p class="game__current">Current player:
-      <span class="game__current-player game__current-player--${currentPlayer}" aria-label="${currentPlayer}">${icon}</span>
-    </p>
-  `;
-}
-
-/** Returns the exit button, an icon followed by its written label. */
-function renderExitButton(): string {
-  return `
-    <button class="game__exit" type="button">
-      ${EXIT_ICON_SVG}
-      <span>Exit game</span>
-    </button>
-  `;
-}
-
-/** Returns the confirmation dialog shown before leaving the game. */
+/**
+ * Picks the button labels the theme asks for in the exit dialog.
+ * @param theme - Theme the game is played in.
+ * @returns The exit dialog markup.
+ */
 function renderExitDialog(theme: Theme): string {
   const stayLabel = theme === "gaming" ? "No, back to game" : "Back to game";
   const quitLabel = theme === "gaming" ? "Yes, quit game" : "Exit game";
-  return `
-    <dialog class="exit-dialog">
-      <form class="exit-dialog__panel" method="dialog">
-        <p class="exit-dialog__question">Are you sure you want to quit the game?</p>
-        <div class="exit-dialog__actions">
-          <button class="exit-dialog__button exit-dialog__button--stay" value="stay">${stayLabel}</button>
-          <button class="exit-dialog__button exit-dialog__button--quit" value="quit">${quitLabel}</button>
-        </div>
-      </form>
-    </dialog>
-  `;
+  return exitDialogTemplate(stayLabel, quitLabel);
 }
 
-/** Returns the board container sized by the field size, filled with all cards. */
+/**
+ * Renders every card of the view into the board.
+ * @param view - Snapshot of the running game.
+ * @returns The board markup.
+ */
 function renderBoard(view: GameView): string {
   const cards = view.cards.map((card) => renderCard(card, view.theme)).join("");
-  return `
-    <div class="board board--${view.fieldSize}">
-      ${cards}
-    </div>
-  `;
+  return boardTemplate(view.fieldSize, cards);
 }
 
-/** Returns a single card with its motif, its themed back and its current state. */
+/**
+ * Derives the motif source and the state classes of a single card.
+ * @param card - Card to render.
+ * @param theme - Theme the game is played in.
+ * @returns The card markup.
+ */
 function renderCard(card: CardData, theme: Theme): string {
   const motifNumber = String(card.motifId).padStart(2, "0");
   const motifUrl = new URL(`./assets/cards/${theme}-card-${motifNumber}.png`, import.meta.url).href;
   const flipped = card.isFlipped ? " card--flipped" : "";
   const matched = card.isMatched ? " card--matched" : "";
-  return `
-    <button class="card${flipped}${matched}" type="button" data-card-id="${card.id}">
-      ${renderCardFaces(motifUrl, card.motifId, theme)}
-    </button>
-  `;
+  const faces = renderCardFaces(motifUrl, card.motifId, theme);
+  return cardTemplate(card.id, `${flipped}${matched}`, faces);
 }
 
-/** Returns the flippable inner faces of a card; the gaming theme leaves the back bare. */
+/**
+ * Decides whether the back of a card carries a watermark; the gaming theme leaves it bare.
+ * @param motifUrl - Source of the motif image.
+ * @param motifId - Number of the motif, used in the alternative text.
+ * @param theme - Theme the game is played in.
+ * @returns The card faces markup.
+ */
 function renderCardFaces(motifUrl: string, motifId: number, theme: Theme): string {
-  const watermark = theme === "gaming"
-    ? ""
-    : `<img class="card__watermark" src="${BACK_URL}" alt="" />`;
-  return `
-    <span class="card__inner">
-      <span class="card__front">
-        <img class="card__motif" src="${motifUrl}" alt="Card motif ${motifId}" />
-      </span>
-      <span class="card__back">
-        ${watermark}
-      </span>
-    </span>
-  `;
+  const watermark = theme === "gaming" ? "" : watermarkTemplate(BACK_URL);
+  return cardFacesTemplate(motifUrl, motifId, watermark);
 }
 
-/** Mirrors the flipped and matched state of every card onto its button. */
+/**
+ * Mirrors the flipped and matched state of every card onto its button.
+ * @param cards - Cards of the running game.
+ */
 function syncCards(cards: readonly CardData[]): void {
   cards.forEach((card) => {
     const button = document.querySelector(`[data-card-id="${card.id}"]`) as HTMLElement;
@@ -171,7 +132,10 @@ function syncCards(cards: readonly CardData[]): void {
   });
 }
 
-/** Writes both players' scores into the score box. */
+/**
+ * Writes both players' scores into the score box.
+ * @param view - Snapshot of the running game.
+ */
 function syncScores(view: GameView): void {
   const blue = document.querySelector(".game__score--blue .game__score-value") as HTMLElement;
   const orange = document.querySelector(".game__score--orange .game__score-value") as HTMLElement;
@@ -179,7 +143,10 @@ function syncScores(view: GameView): void {
   orange.textContent = String(view.scoreOrange);
 }
 
-/** Marks the current player on the badge by swapping its modifier and label. */
+/**
+ * Marks the current player on the badge by swapping its modifier and label.
+ * @param currentPlayer - Player whose turn it is.
+ */
 function syncCurrentPlayer(currentPlayer: Player): void {
   const badge = document.querySelector(".game__current-player") as HTMLElement;
   badge.classList.toggle("game__current-player--blue", currentPlayer === "blue");
@@ -187,7 +154,10 @@ function syncCurrentPlayer(currentPlayer: Player): void {
   badge.setAttribute("aria-label", currentPlayer);
 }
 
-/** Closes the dialog when the backdrop itself is clicked, not its content. */
+/**
+ * Closes the dialog when the backdrop itself is clicked, not its content.
+ * @param event - Click event on the dialog.
+ */
 function onDialogClick(event: MouseEvent): void {
   if (event.target !== event.currentTarget) return;
   (event.currentTarget as HTMLDialogElement).close();
@@ -210,7 +180,10 @@ function flipMismatchBack(): void {
   mismatchTimer = window.setTimeout(finishMismatch, FLIP_DURATION_MS);
 }
 
-/** Resolves a click to a card id, forwards it to the game logic and syncs the screen. */
+/**
+ * Resolves a click to a card id, forwards it to the game logic and syncs the screen.
+ * @param event - Click event on the board.
+ */
 function onBoardClick(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return;
   const card = event.target.closest<HTMLElement>('[data-card-id]');
@@ -226,7 +199,10 @@ function onBoardClick(event: MouseEvent): void {
   mismatchTimer = window.setTimeout(flipMismatchBack, FLIP_BACK_DELAY_MS);
 }
 
-/** Wires the exit button and its dialog; leaving the game is handed to the given callback. */
+/**
+ * Wires the exit button and its dialog; leaving the game is handed to the given callback.
+ * @param onExit - Called once the player confirms leaving the game.
+ */
 function initExitDialog(onExit: () => void): void {
   const exitButton = document.querySelector(".game__exit") as HTMLElement;
   const dialog = document.querySelector(".exit-dialog") as HTMLDialogElement;
@@ -239,7 +215,11 @@ function initExitDialog(onExit: () => void): void {
   });
 }
 
-/** Wires the board and the exit dialog; the first game result is handed to the callback once. */
+/**
+ * Wires the board and the exit dialog; the first game result is handed to the callback once.
+ * @param onExit - Called once the player confirms leaving the game.
+ * @param onGameOver - Called once with the result when the game is over.
+ */
 export function initGame(onExit: () => void, onGameOver: (result: GameResult) => void): void {
   const board = document.querySelector(".board") as HTMLElement;
   const onClick = (event: MouseEvent): void => {
