@@ -5,6 +5,7 @@ import styleIcon from "./assets/icons/style.svg";
 import arrowSelected from "./assets/icons/arrow-selected.svg";
 import underlineHeadline from "./assets/icons/underline-headline.svg";
 import smartDisplayIcon from "./assets/icons/smart-display.svg?raw";
+import { barEntryTemplate, barSlashTemplate, barTemplate, groupTemplate, leftColumnTemplate, optionTemplate, rightColumnTemplate, settingsHeaderTemplate, settingsTemplate, startButtonTemplate } from "./settings-templates";
 
 const gameSettings: GameSettings = {
   theme: null,
@@ -68,107 +69,88 @@ const THEMES: readonly Theme[] = ["code-vibes", "gaming", "da-projects"];
 const PLAYERS: readonly Player[] = ["blue", "orange"];
 const SIZES: readonly FieldSize[] = ["4x4", "4x6", "6x6"];
 
-/** Returns the complete settings screen markup. */
+/**
+ * Collects the header and both columns of the settings screen.
+ * @returns The complete settings screen markup.
+ */
 export function renderSettings(): string {
-  return `
-    <section class="settings">
-      <div class="settings__content">
-        ${renderHeader()}
-        <div class="settings__layout">
-          ${renderLeftColumn()}
-          ${renderRightColumn()}
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-/** Returns the headline with its decorative underline. */
-function renderHeader(): string {
-  return `
-    <header class="settings__header">
-      <h1 class="settings__headline">Settings</h1>
-      <img class="settings__underline" src="${underlineHeadline}" alt="" />
-    </header>
-  `;
-}
-
-/** Returns the column holding all three option groups. */
-function renderLeftColumn(): string {
-  return `
-    <div class="settings__column">
-      ${GROUPS.map(renderGroup).join("")}
-    </div>
-  `;
-}
-
-/** Returns the column holding the theme preview and the selection bar. */
-function renderRightColumn(): string {
-  return `
-    <div class="settings__column settings__column--right">
-      <div class="settings__preview"></div>
-      ${renderBar()}
-    </div>
-  `;
-}
-
-/** Returns one option group as a fieldset with legend and radio list. */
-function renderGroup(group: SettingsGroup): string {
-  return `
-    <fieldset class="settings__group settings__group--${group.modifier}">
-      <legend class="settings__legend">
-        <img class="settings__legend-icon" src="${group.icon}" alt="" />
-        ${group.title}
-      </legend>
-      <div class="settings__options">
-        ${group.options.map((option) => renderOption(group.name, option)).join("")}
-      </div>
-    </fieldset>
-  `;
-}
-
-/** Returns one radio option with its label and selection arrow. */
-function renderOption(name: string, option: SettingsOption): string {
-  const preselected = option.checked ? " checked" : "";
-  return `
-    <label class="settings__option">
-      <input class="settings__radio" type="radio" name="${name}" value="${option.value}"${preselected} />
-      <span class="settings__text">${option.label}</span>
-      <img class="settings__arrow" src="${arrowSelected}" alt="" />
-    </label>
-  `;
-}
-
-/** Returns the selection bar with placeholder values and the start button. */
-function renderBar(): string {
-  return `
-    <div class="settings__bar">
-      ${BAR_PLACEHOLDERS.map(renderBarEntry).join("")}
-      ${renderStartButton()}
-    </div>
-  `;
+  const header = renderHeader();
+  const leftColumn = renderLeftColumn();
+  const rightColumn = renderRightColumn();
+  return settingsTemplate(header, leftColumn, rightColumn);
 }
 
 /**
- * Returns one bar value, preceded by a slash separator when it is not first.
- * @param value - the text shown in this bar segment
- * @param index - the position of the segment in the bar
- * @returns the markup of the segment, carrying its width reservation
+ * Hands the underline image to the header template.
+ * @returns The settings header markup.
  */
-function renderBarEntry(value: string, index: number): string {
-  const separator = index === 0 ? "" : `<span class="settings__slash"></span>`;
-  const reserve = BAR_RESERVES[index];
-  return `${separator}<span class="settings__value" data-reserve="${reserve}">${value}</span>`;
+function renderHeader(): string {
+  return settingsHeaderTemplate(underlineHeadline);
 }
 
-/** Returns the disabled start button with its inline icon. */
+/**
+ * Renders all three option groups into the left column.
+ * @returns The left column markup.
+ */
+function renderLeftColumn(): string {
+  return leftColumnTemplate(GROUPS.map(renderGroup).join(""));
+}
+
+/**
+ * Collects the selection bar into the right column.
+ * @returns The right column markup.
+ */
+function renderRightColumn(): string {
+  return rightColumnTemplate(renderBar());
+}
+
+/**
+ * Renders every option of one group into its fieldset.
+ * @param group - Group holding title, icon, name and options.
+ * @returns The option group markup.
+ */
+function renderGroup(group: SettingsGroup): string {
+  const options = group.options.map((option) => renderOption(group.name, option)).join("");
+  return groupTemplate(group.modifier, group.icon, group.title, options);
+}
+
+/**
+ * Decides whether the option starts out preselected.
+ * @param name - Radio group the option belongs to.
+ * @param option - Option holding value, label and preselection.
+ * @returns The radio option markup.
+ */
+function renderOption(name: string, option: SettingsOption): string {
+  const preselected = option.checked ? " checked" : "";
+  return optionTemplate(name, option.value, preselected, option.label, arrowSelected);
+}
+
+/**
+ * Renders every placeholder into the bar and adds the start button.
+ * @returns The selection bar markup.
+ */
+function renderBar(): string {
+  const entries = BAR_PLACEHOLDERS.map(renderBarEntry).join("");
+  return barTemplate(entries, renderStartButton());
+}
+
+/**
+ * Decides whether a slash precedes the segment and picks its width reservation.
+ * @param value - The text shown in this bar segment.
+ * @param index - The position of the segment in the bar.
+ * @returns The bar segment markup.
+ */
+function renderBarEntry(value: string, index: number): string {
+  const separator = index === 0 ? "" : barSlashTemplate();
+  return barEntryTemplate(separator, BAR_RESERVES[index], value);
+}
+
+/**
+ * Hands the inline icon to the start button template.
+ * @returns The start button markup.
+ */
 function renderStartButton(): string {
-  return `
-    <button class="settings__start" type="button" disabled>
-      <span class="settings__start-icon" aria-hidden="true">${smartDisplayIcon}</span>
-      <span class="settings__start-label">Start</span>
-    </button>
-  `;
+  return startButtonTemplate(smartDisplayIcon);
 }
 
 /** Returns the value of the checked radio input in the given group, or null. */
