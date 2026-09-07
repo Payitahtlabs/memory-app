@@ -1,7 +1,7 @@
 import "./styles/style.scss";
 import { getStartSettings, initSettings, renderSettings } from "./settings";
 import { getGameView, startGame } from "./game";
-import { renderGame, initGame } from "./game-screen";
+import { renderGame, initGame, FLIP_DURATION_MS } from "./game-screen";
 import { initResult, renderGameOver, renderResult } from "./game-over-screen";
 import type { GameResult } from "./types";
 import controllerIcon from "./assets/icons/stadia-controller.svg?raw";
@@ -10,7 +10,6 @@ import arrowBold from "./assets/icons/arrow-right-bold.svg";
 
 const CONTENT = document.getElementById("content") as HTMLElement;
 
-const FLIP_DURATION_MS = 400;
 const GAME_OVER_DELAY_MS = 1500;
 
 /** Starts the app on the homescreen. */

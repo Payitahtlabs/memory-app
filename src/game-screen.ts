@@ -1,7 +1,13 @@
 import type { CardData, GameResult, GameView, Player, Theme } from "./types";
-import { getGameView, getResult, handleCardClick } from "./game";
+import { getGameView, getResult, handleCardClick, hasOpenMismatch, hideMismatch, resolveMismatch } from "./game";
 
 const BACK_URL = new URL("./assets/cards/card-back-watermark.png", import.meta.url).href;
+
+const FLIP_BACK_DELAY_MS = 1000;
+
+export const FLIP_DURATION_MS = 400;
+
+let mismatchTimer = 0;
 
 export const PAWN_SVG = `<svg viewBox="5.33 2.67 21.34 26.66" fill="currentColor"><path d="M8 29.33C7.27 29.33 6.64 29.07 6.12 28.55C5.59 28.03 5.33 27.4 5.33 26.67V24.03C5.33 23.59 5.43 23.18 5.63 22.8C5.83 22.42 6.1 22.1 6.43 21.83C7.97 20.59 9.12 19.33 9.88 18.07C10.65 16.8 11.19 15.67 11.5 14.67H9.33C8.96 14.67 8.64 14.54 8.38 14.28C8.13 14.03 8 13.71 8 13.33C8 12.96 8.13 12.64 8.38 12.38C8.64 12.13 8.96 12 9.33 12H11C10.69 11.51 10.44 10.99 10.27 10.43C10.09 9.88 10 9.29 10 8.67C10 7 10.58 5.58 11.75 4.42C12.92 3.25 14.33 2.67 16 2.67C17.67 2.67 19.08 3.25 20.25 4.42C21.42 5.58 22 7 22 8.67C22 9.29 21.91 9.88 21.73 10.43C21.56 10.99 21.31 11.51 21 12H22.67C23.04 12 23.36 12.13 23.62 12.38C23.87 12.64 24 12.96 24 13.33C24 13.71 23.87 14.03 23.62 14.28C23.36 14.54 23.04 14.67 22.67 14.67H20.5C20.81 15.67 21.35 16.8 22.12 18.07C22.88 19.33 24.03 20.59 25.57 21.83C25.9 22.1 26.17 22.42 26.37 22.8C26.57 23.18 26.67 23.59 26.67 24.03V26.67C26.67 27.4 26.41 28.03 25.88 28.55C25.36 29.07 24.73 29.33 24 29.33H8ZM8 26.67H24V24C21.96 22.4 20.48 20.75 19.57 19.05C18.66 17.35 18.04 15.89 17.73 14.67H14.27C13.96 15.89 13.34 17.35 12.43 19.05C11.52 20.75 10.04 22.4 8 24V26.67ZM16 12C16.93 12 17.72 11.68 18.37 11.03C19.01 10.39 19.33 9.6 19.33 8.67C19.33 7.73 19.01 6.94 18.37 6.3C17.72 5.66 16.93 5.33 16 5.33C15.07 5.33 14.28 5.66 13.63 6.3C12.99 6.94 12.67 7.73 12.67 8.67C12.67 9.6 12.99 10.39 13.63 11.03C14.28 11.68 15.07 12 16 12Z" /></svg>`;
 
@@ -187,17 +193,37 @@ function onDialogClick(event: MouseEvent): void {
   (event.currentTarget as HTMLDialogElement).close();
 }
 
+/** Hands the turn to the other player once the cards lie face down again. */
+function finishMismatch(): void {
+  resolveMismatch();
+  const view = getGameView();
+  if (!view) return;
+  syncCurrentPlayer(view.currentPlayer);
+}
+
+/** Turns the two mismatched cards back down and schedules the turn hand-over. */
+function flipMismatchBack(): void {
+  hideMismatch();
+  const view = getGameView();
+  if (!view) return;
+  syncCards(view.cards);
+  mismatchTimer = window.setTimeout(finishMismatch, FLIP_DURATION_MS);
+}
+
 /** Resolves a click to a card id, forwards it to the game logic and syncs the screen. */
 function onBoardClick(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return;
   const card = event.target.closest<HTMLElement>('[data-card-id]');
   if (!card) return;
+  if (hasOpenMismatch()) return;
   handleCardClick(Number(card.dataset.cardId));
   const view = getGameView();
   if (!view) return;
   syncCards(view.cards);
   syncScores(view);
   syncCurrentPlayer(view.currentPlayer);
+  if (!hasOpenMismatch()) return;
+  mismatchTimer = window.setTimeout(flipMismatchBack, FLIP_BACK_DELAY_MS);
 }
 
 /** Wires the exit button and its dialog; leaving the game is handed to the given callback. */
@@ -207,7 +233,9 @@ function initExitDialog(onExit: () => void): void {
   exitButton.addEventListener("click", () => dialog.showModal());
   dialog.addEventListener("click", onDialogClick);
   dialog.addEventListener("close", () => {
-    if (dialog.returnValue === "quit") onExit();
+    if (dialog.returnValue !== "quit") return;
+    clearTimeout(mismatchTimer);
+    onExit();
   });
 }
 

@@ -49,16 +49,24 @@ export function startGame(theme: Theme, fieldSize: FieldSize, startPlayer: Playe
   return gameState;
 }
 
-/** Handles a click on the card with the given id according to the game rules. */
+/**
+ * Tells whether two mismatched cards are still lying open.
+ * @returns true while a mismatch blocks the board.
+ */
+export function hasOpenMismatch(): boolean {
+  if (!gameState) return false;
+  return gameState.waitingCards.length === 2;
+}
+
+/**
+ * Handles a click on the card with the given id according to the game rules.
+ * @param cardId - Id of the clicked card.
+ */
 export function handleCardClick(cardId: number): void {
-  if (!gameState) return;
+  if (!gameState || hasOpenMismatch()) return;
   const card = gameState.cards.find((c) => c.id === cardId);
   if (!card) return;
-
   if (card.isMatched || gameState.waitingCards.includes(card)) return;
-  if (gameState.waitingCards.length === 2) {
-    clearWaitingCards();
-  }
 
   card.flip();
   gameState.waitingCards.push(card);
@@ -67,28 +75,33 @@ export function handleCardClick(cardId: number): void {
   }
 }
 
-/** Resolves the comparison of the two waiting cards as a match or a player switch. */
+/** Resolves the two waiting cards as a match; a mismatch is left lying open. */
 function resolveComparison(): void {
   if (!gameState) return;
   const first = gameState.waitingCards[0];
   const second = gameState.waitingCards[1];
+  if (first.motifId !== second.motifId) return;
 
-  if (first.motifId === second.motifId) {
-    first.markAsMatched();
-    second.markAsMatched();
-    gameState.scores[gameState.currentPlayer] += 1;
-    gameState.waitingCards = [];
-  } else {
-    gameState.currentPlayer = gameState.currentPlayer === "blue" ? "orange" : "blue";
-  }
+  first.markAsMatched();
+  second.markAsMatched();
+  gameState.scores[gameState.currentPlayer] += 1;
+  gameState.waitingCards = [];
 }
 
-/** Flips the two waiting cards back and clears the list. */
-function clearWaitingCards(): void {
-  if (!gameState) return;
+/** Turns the two open mismatched cards face down without lifting the block. */
+export function hideMismatch(): void {
+  if (!gameState || !hasOpenMismatch()) return;
+  gameState.waitingCards[0].flipBack();
+  gameState.waitingCards[1].flipBack();
+}
+
+/** Flips the two open cards back, hands the turn over and lifts the block. */
+export function resolveMismatch(): void {
+  if (!gameState || !hasOpenMismatch()) return;
   gameState.waitingCards[0].flipBack();
   gameState.waitingCards[1].flipBack();
   gameState.waitingCards = [];
+  gameState.currentPlayer = gameState.currentPlayer === "blue" ? "orange" : "blue";
 }
 
 /** Returns a read-only snapshot of the current game for rendering. */
