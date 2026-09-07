@@ -61,6 +61,8 @@ const BAR_LABELS: Record<Theme | Player | FieldSize, string> = {
   "6x6": "Board-36 Cards",
 };
 
+const BAR_RESERVES: string[] = ["DA Projects", "Orange Player", "Board-24 Cards"];
+
 const SETTINGS_STORAGE_KEY = "memory-settings";
 const THEMES: readonly Theme[] = ["code-vibes", "gaming", "da-projects"];
 const PLAYERS: readonly Player[] = ["blue", "orange"];
@@ -147,10 +149,16 @@ function renderBar(): string {
   `;
 }
 
-/** Returns one bar value, preceded by a slash separator when it is not first. */
+/**
+ * Returns one bar value, preceded by a slash separator when it is not first.
+ * @param value - the text shown in this bar segment
+ * @param index - the position of the segment in the bar
+ * @returns the markup of the segment, carrying its width reservation
+ */
 function renderBarEntry(value: string, index: number): string {
   const separator = index === 0 ? "" : `<span class="settings__slash"></span>`;
-  return `${separator}<span class="settings__value">${value}</span>`;
+  const reserve = BAR_RESERVES[index];
+  return `${separator}<span class="settings__value" data-reserve="${reserve}">${value}</span>`;
 }
 
 /** Returns the disabled start button with its inline icon. */

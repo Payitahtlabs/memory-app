@@ -6,6 +6,12 @@ $theme-names: "code-vibes", "gaming", "da-projects";
 $start-label-width: 53.44px;
 $start-hover-scale: 1.1;
 
+$slash-width: 56px;
+$slash-margin: 18.73px;
+$slash-footprint: $slash-width - $slash-margin * 2;
+$slash-diamond-width: 53.666px;
+$slash-diamond-margin: ($slash-diamond-width - $slash-footprint) * 0.5;
+
 .settings {
   display: flex;
   flex-direction: column;
@@ -194,21 +200,29 @@ $start-hover-scale: 1.1;
   &__value {
     font-size: 20px;
     line-height: 24px;
+    text-align: center;
+
+    &::after {
+      content: attr(data-reserve);
+      display: block;
+      height: 0;
+      visibility: hidden;
+    }
   }
 
   &__slash {
     position: relative;
     flex-shrink: 0;
-    width: 56px;
+    width: $slash-width;
     height: 8px;
-    margin: 0 -18.73px;
+    margin: 0 (-$slash-margin);
     background-color: var.$accent;
     transform: rotate(109.33deg);
 
     &--diamond {
-      width: 53.666px;
+      width: $slash-diamond-width;
       height: 4px;
-      margin: 0 -14.83px;
+      margin: 0 (-$slash-diamond-margin);
       transform: rotate(116.57deg);
 
       &::after {
