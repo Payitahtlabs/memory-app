@@ -6,6 +6,11 @@ export class Card implements CardData {
   isFlipped: boolean;
   isMatched: boolean;
 
+  /**
+   * Creates a card with its id and motif, face down and unmatched.
+   * @param id - Unique id of the card.
+   * @param motifId - Id of the motif the card shows.
+   */
   constructor(id: number, motifId: number) {
     this.id = id;
     this.motifId = motifId;

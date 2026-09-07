@@ -4,7 +4,11 @@ import { CARD_MOTIF_COUNTS, FIELD_SIZE_PAIRS } from "./types";
 
 let gameState: GameState | null = null;
 
-/** Returns a new array with the items in random order. */
+/**
+ * Returns a new array with the items in random order.
+ * @param items - The items to put in random order.
+ * @returns A new array with the items in random order.
+ */
 function shuffle<T>(items: T[]): T[] {
   const result = [...items];
   for (let i = result.length - 1; i > 0; i--) {
@@ -14,14 +18,23 @@ function shuffle<T>(items: T[]): T[] {
   return result;
 }
 
-/** Draws a given number of random motif ids for a theme. */
+/**
+ * Draws a given number of random motif ids for a theme.
+ * @param theme - Theme whose motif pool is drawn from.
+ * @param pairCount - How many motif ids to draw.
+ * @returns The drawn motif ids.
+ */
 function drawMotifs(theme: Theme, pairCount: number): number[] {
   const pool = Array.from({ length: CARD_MOTIF_COUNTS[theme] }, (_, index) => index + 1);
   const shuffled = shuffle(pool);
   return shuffled.slice(0, pairCount);
 }
 
-/** Creates a pair of cards for each motif id. */
+/**
+ * Creates a pair of cards for each motif id.
+ * @param motifIds - Motif ids to build a pair for.
+ * @returns The created cards, two per motif id.
+ */
 function createCards(motifIds: number[]): Card[] {
   const cards: Card[] = [];
   for (let i = 0; i < motifIds.length; i++) {
@@ -31,7 +44,13 @@ function createCards(motifIds: number[]): Card[] {
   return cards;
 }
 
-/** Creates a fresh game state for the given settings. */
+/**
+ * Creates a fresh game state for the given settings.
+ * @param theme - Chosen visual theme.
+ * @param fieldSize - Chosen board size.
+ * @param startPlayer - Player who takes the first turn.
+ * @returns The fresh game state.
+ */
 export function startGame(theme: Theme, fieldSize: FieldSize, startPlayer: Player): GameState {
   const pairCount = FIELD_SIZE_PAIRS[fieldSize];
   const motifIds = drawMotifs(theme, pairCount);
@@ -104,7 +123,10 @@ export function resolveMismatch(): void {
   gameState.currentPlayer = gameState.currentPlayer === "blue" ? "orange" : "blue";
 }
 
-/** Returns a read-only snapshot of the current game for rendering. */
+/**
+ * Returns a read-only snapshot of the current game for rendering.
+ * @returns The snapshot, or null while no game is running.
+ */
 export function getGameView(): GameView | null {
   if (!gameState) return null;
   return {
@@ -117,13 +139,19 @@ export function getGameView(): GameView | null {
   };
 }
 
-/** Tells whether every card has been matched. */
+/**
+ * Tells whether every card has been matched.
+ * @returns true once every card has been matched.
+ */
 function isGameOver(): boolean {
   if (!gameState) return false;
   return gameState.cards.every((card) => card.isMatched);
 }
 
-/** Returns the winner once the game is over, "draw" on equal scores, null while it runs. */
+/**
+ * Returns the winner once the game is over, "draw" on equal scores, null while it runs.
+ * @returns The winning player, "draw", or null while the game runs.
+ */
 export function getResult(): GameResult | null {
   if (!gameState || !isGameOver()) return null;
   const { blue, orange } = gameState.scores;

@@ -38,7 +38,10 @@ function showGame(): void {
   initGame(showSettings, showGameOver);
 }
 
-/** Lets the last flip finish, then shows the final score and, after a pause, the result. */
+/**
+ * Lets the last flip finish, then shows the final score and, after a pause, the result.
+ * @param result - Result of the finished game.
+ */
 function showGameOver(result: GameResult): void {
   setTimeout(() => {
     const view = getGameView();
@@ -48,7 +51,10 @@ function showGameOver(result: GameResult): void {
   }, FLIP_DURATION_MS);
 }
 
-/** Replaces the current screen with the result screen and wires it up. */
+/**
+ * Replaces the current screen with the result screen and wires it up.
+ * @param result - Result of the finished game.
+ */
 function showResult(result: GameResult): void {
   const view = getGameView();
   if (!view) return;

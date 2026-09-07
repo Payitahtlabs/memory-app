@@ -153,13 +153,21 @@ function renderStartButton(): string {
   return startButtonTemplate(smartDisplayIcon);
 }
 
-/** Returns the value of the checked radio input in the given group, or null. */
+/**
+ * Returns the value of the checked radio input in the given group, or null.
+ * @param group - Name of the radio group.
+ * @returns The checked value, or null when nothing is checked.
+ */
 function readChecked(group: string): string | null {
   const input = document.querySelector<HTMLInputElement>(`input[name="${group}"]:checked`);
   return input?.value ?? null;
 }
 
-/** Writes a changed radio value into the settings state. Returns whether the group was known. */
+/**
+ * Writes a changed radio value into the settings state. Returns whether the group was known.
+ * @param input - The changed radio input.
+ * @returns true when the group was known.
+ */
 function applySettingValue(input: HTMLInputElement): boolean {
   switch (input.name) {
     case "theme":
@@ -176,7 +184,10 @@ function applySettingValue(input: HTMLInputElement): boolean {
   }
 }
 
-/** Updates the game settings state from a changed radio input. */
+/**
+ * Updates the game settings state from a changed radio input.
+ * @param event - The change event from the settings screen.
+ */
 function handleSettingsChange(event: Event): void {
   const input = event.target;
   if (!(input instanceof HTMLInputElement)) return;
@@ -283,7 +294,10 @@ function handleStart(onStart: () => void): void {
   onStart();
 }
 
-/** Wires up the settings screen interactions and the start callback. */
+/**
+ * Wires up the settings screen interactions and the start callback.
+ * @param onStart - Called once the start button has been pressed.
+ */
 export function initSettings(onStart: () => void): void {
   restoreSettings();
   gameSettings.theme = readChecked("theme") as Theme | null;
@@ -296,7 +310,10 @@ export function initSettings(onStart: () => void): void {
   button?.addEventListener("click", () => handleStart(onStart));
 }
 
-/** Returns the completed start settings, or null while a selection is missing. */
+/**
+ * Returns the completed start settings, or null while a selection is missing.
+ * @returns The completed start settings, or null while a selection is missing.
+ */
 export function getStartSettings(): StartSettings | null {
   if (gameSettings.theme === null || gameSettings.player === null
     || gameSettings.fieldSize === null) {
