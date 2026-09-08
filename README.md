@@ -94,3 +94,7 @@ to the DA coding conventions (max. 14 lines per function, explicit
 return types, TSDoc, BEM). After several projects without any tooling,
 this was my first with a build setup, configured manually to
 understand what each part of the chain does.
+
+The visual design and all card artwork belong to Developer Akademie and
+are used here for training purposes only. The source code is published
+for review but not released under an open-source license.
