@@ -120,13 +120,13 @@ $slash-diamond-margin: ($slash-diamond-width - $slash-footprint) * 0.5;
   }
 
   &__radio:checked,
-  &__group--theme &__option:hover &__radio {
+  &__group &__option:hover &__radio {
     border-width: 2px;
     background-color: var.$bg-dark;
     box-shadow: inset 0 0 0 7px var.$bg-light;
   }
 
-  &__group--theme:has(&__option:hover) &__option:not(:hover) &__radio:checked {
+  &__group:has(&__option:hover) &__option:not(:hover) &__radio:checked {
     border-width: 3px;
     background-color: transparent;
     box-shadow: none;
@@ -138,11 +138,11 @@ $slash-diamond-margin: ($slash-diamond-width - $slash-footprint) * 0.5;
   }
 
   &__radio:checked ~ &__text,
-  &__group--theme &__option:hover &__text {
+  &__group &__option:hover &__text {
     font-weight: 700;
   }
 
-  &__group--theme:has(&__option:hover) &__option:not(:hover) &__radio:checked ~ &__text {
+  &__group:has(&__option:hover) &__option:not(:hover) &__radio:checked ~ &__text {
     font-weight: 400;
   }
 
@@ -156,12 +156,12 @@ $slash-diamond-margin: ($slash-diamond-width - $slash-footprint) * 0.5;
   }
 
   &__radio:checked ~ &__arrow,
-  &__group--theme &__option:hover &__arrow {
+  &__group &__option:hover &__arrow {
     width: 49.66px;
     opacity: 1;
   }
 
-  &__group--theme:has(&__option:hover) &__option:not(:hover) &__radio:checked ~ &__arrow {
+  &__group:has(&__option:hover) &__option:not(:hover) &__radio:checked ~ &__arrow {
     width: 0;
     opacity: 0;
   }
