@@ -1,7 +1,7 @@
 {
   "name": "memory-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Two-player memory card game with three themes",
   "type": "module",
   "private": true,
   "scripts": {
@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Payitahtlabs",
+  "license": "UNLICENSED",
   "devDependencies": {
     "sass": "^1.102.0",
     "typescript": "^7.0.2",
